@@ -16,7 +16,7 @@ export const routes: Routes = [
     {path: 'department-budget', component: DepartmentBudget},
     {path: 'login', component: Login},
     {path: 'profile', component: Profile},
-    {path: 'signup', component: Signup},
+    {path: 'register', component: Signup},
     {path: 'staff-payroll', component: StaffPayroll},
     {path: 'student-fees', component: StudentFees},
     {path: '**', component: NotFound},
