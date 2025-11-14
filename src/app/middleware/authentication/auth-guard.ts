@@ -18,8 +18,8 @@ canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean 
       return this.router.createUrlTree(['/login'])
     }
     const allowedRoles = route.data['roles'] as string[];
-    if(allowedRoles && !allowedRoles.includes(currentUser.role)){
-      return this.router.createUrlTree(['/notfound'])
+    if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
+        return this.router.createUrlTree(['/notfound']);
     }
     return true;
 }

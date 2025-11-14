@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { UserService, User } from '../../../shared/userService/userService';
+import { UserService, User } from '../../shared/userService/userService';
 import { CommonModule } from '@angular/common';
-import { Button } from '../../../shared/button/button';
+import { Button } from '../../shared/button/button';
 
 @Component({
   selector: 'app-users',

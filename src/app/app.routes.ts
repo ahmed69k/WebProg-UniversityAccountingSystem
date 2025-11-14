@@ -9,7 +9,8 @@ import {Profile} from './components/profile/profile';
 import {SignUp} from './components/sign-up/sign-up';
 import {StaffPayroll} from './components/staff-payroll/staff-payroll';
 import {StudentFees} from './components/student-fees/student-fees';
-import { Users } from './components/users/users/users';
+import { Users } from './components/users/users';
+import { AuthGuard } from './middleware/authentication/auth-guard';
 
 export const routes: Routes = [
 
@@ -20,7 +21,7 @@ export const routes: Routes = [
     {path: 'register', component: SignUp},
     {path: 'staff-payroll', component: StaffPayroll},
     {path: 'student-fees', component: StudentFees},
-    {path: 'users', component: Users},
+    {path: 'users', component: Users, canActivate: [AuthGuard], data: {roles: ['Admin']}},
     {path: '**', component: NotFound},
 
 ];
