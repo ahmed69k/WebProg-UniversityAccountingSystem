@@ -10,4 +10,5 @@ export class Button {
   @Input() text: string = 'Click me!'
   @Input() type: string = 'button';
   @Input() disabled: boolean = false;
+  @Input() style: string = ''
 }

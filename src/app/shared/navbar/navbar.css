@@ -1,12 +1,13 @@
 .body{
     justify-items: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 .navbar{
     display: flex;
-    background-color: black;
+    background-color: rgb(0, 0, 108);
     justify-content: center;
     align-items: center;
-    gap: 800px;
+    gap: 700px;
     position: fixed;
     width: 90vw;
     height: 60px;
