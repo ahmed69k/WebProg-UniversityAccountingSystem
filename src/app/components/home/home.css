@@ -1,6 +1,123 @@
-.body{
-    align-items: center;
-    justify-items: center;
-    align-content: center;
-    height: calc(100vh - 200px);
+/* home.css */
+.home-container {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-look {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.main-title {
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 18px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Users Section */
+.users-section {
+  padding: 40px 20px;
+  text-align: center;
+  background: #f8f9fa;
+}
+
+.users-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.users-section .description {
+  font-size: 16px;
+  color: #666;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.user-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border-left: 4px solid #667eea;
+  transition: transform 0.3s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+}
+
+.user-card h4 {
+  color: #667eea;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.user-card ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.user-card li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.user-card li:last-child {
+  border-bottom: none;
 }
