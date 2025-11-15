@@ -11,9 +11,6 @@
         <li class="navbar__list__item">
             <a routerLink="register" *ngIf="!token">Sign Up</a>
         </li>
-        <!-- <li class="navbar__list__item"> 
-            <a routerLink="users" *ngIf="isAdmin()">Users</a> 
-        </li> -->
         <li class="navbar__list__item" *ngIf="token">
             <a routerLink="profile">Profile</a>
         </li>
