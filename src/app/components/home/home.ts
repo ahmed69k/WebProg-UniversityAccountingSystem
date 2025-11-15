@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserService, User } from '../../shared/userService/userService';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,15 @@ export class Home {
     }
   ];
 
-  constructor(private router: Router) {}
+  user:User;
+  token:string | null;
+
+  constructor(private router: Router, userService:UserService) {
+    this.token = localStorage.getItem('token')
+    this.user = userService.users.find(u=>u.token === this.token)!
+
+
+  }
 
   isLoggedIn(): boolean {
     const userData = localStorage.getItem('user');
