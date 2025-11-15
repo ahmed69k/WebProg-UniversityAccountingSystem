@@ -1,0 +1,12 @@
+<div class="admin-panel" *ngIf="isAdmin">
+  <h3>Admin Panel</h3>
+  <div class="debug-info" style="color: red; font-size: 12px;">
+    Debug: isAdmin = {{isAdmin}}
+  </div>
+  <div class="admin-links">
+    <button class="btn btn-outline" (click)="navigateToUsers()">Users Management</button>
+    <button class="btn btn-outline" (click)="navigateToStaffPayroll()">Staff Payroll</button>
+    <button class="btn btn-outline" (click)="navigateToDepartmentBudget()">Department Budget</button>
+    <button class="btn btn-outline" (click)="navigateToStudentFees()">Student Fees</button>
+  </div>
+</div>
