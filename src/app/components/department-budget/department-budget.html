@@ -1,1 +1,125 @@
-<p>department-budget works!</p>
+<div class="department-budget">
+  <div class="header">
+    <h2 *ngIf="isAdmin()" >Department Budget Management</h2>
+    <button class="btn-primary" (click)="showForm = !showForm">
+      + Add Department
+    </button>
+  </div>
+
+  <div *ngIf="showForm" class="form-section">
+    <h3>Add New Department</h3>
+    <form (ngSubmit)="onSubmit()" class="department-form">
+      <div class="form-group">
+        <label for="name">Department Name:</label>
+        <input 
+          type="text" 
+          id="name"
+          [(ngModel)]="name" 
+          name="name" 
+          required
+          placeholder="Enter department name">
+      </div>
+
+      <div class="form-group">
+        <label for="totalBudget">Total Budget ($):</label>
+        <input 
+          type="number" 
+          id="totalBudget"
+          [(ngModel)]="totalBudget" 
+          name="totalBudget" 
+          min="0"
+          required
+          placeholder="Enter total budget">
+      </div>
+
+      <div class="form-group">
+        <label for="allocatedBudget">Allocated Budget ($):</label>
+        <input 
+          type="number" 
+          id="allocatedBudget"
+          [(ngModel)]="allocatedBudget" 
+          name="allocatedBudget" 
+          min="0"
+          [max]="totalBudget"
+          required
+          placeholder="Enter allocated budget">
+      </div>
+
+      <div class="form-group">
+        <label for="remainingBudget">Remaining Budget ($):</label>
+        <input 
+          type="number" 
+          id="remainingBudget"
+          [(ngModel)]="remainingBudget" 
+          name="remainingBudget" 
+          [readonly]="true"
+          [value]="totalBudget - allocatedBudget"
+          class="readonly-field">
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Add Department</button>
+        <button type="button" class="btn-secondary" (click)="showForm = false">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card">
+      <h3>Total Budget</h3>
+      <p>${{ getTotalBudget() | number }}</p>
+    </div>
+    <div class="card">
+      <h3>Total Allocated</h3>
+      <p>${{ getTotalAllocated() | number }}</p>
+    </div>
+    <div class="card">
+      <h3>Total Remaining</h3>
+      <p>${{ getTotalRemaining() | number }}</p>
+    </div>
+    <div class="card">
+      <h3>Total Departments</h3>
+      <p>{{ departments.length }}</p>
+    </div>
+  </div>
+
+  <!-- Departments Table -->
+  <div class="departments-table" *ngIf="departments.length > 0">
+    <h3>Department List</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Department Name</th>
+          <th>Total Budget</th>
+          <th>Allocated Budget</th>
+          <th>Remaining Budget</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dept of departments">
+          <td class="department-name">{{ dept.name }}</td>
+          <td>${{ dept.totalBudget | number }}</td>
+          <td>${{ dept.allocatedBudget | number }}</td>
+          <td [class.negative]="dept.remainingBudget < 0" 
+              [class.positive]="dept.remainingBudget >= 0">
+            ${{ dept.remainingBudget | number }}
+          </td>
+          <td class="actions">
+            <button class="btn-delete" (click)="deleteDepartment(dept.name)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="departments.length === 0" class="empty-state">
+    <div class="empty-icon">📊</div>
+    <h3>No Departments Found</h3>
+    <p>Start by adding your first department using the "Add Department" button above.</p>
+  </div>
+</div>
