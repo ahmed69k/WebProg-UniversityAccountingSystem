@@ -11,20 +11,20 @@ import {StaffPayroll} from './components/staff-payroll/staff-payroll';
 import {StudentFees} from './components/student-fees/student-fees';
 import { Users } from './components/users/users';
 import { AuthGuard } from './middleware/authentication/auth-guard';
-import { AdminPanel } from './shared/admin-panel/admin-panel';
+import { AdminPanel } from './components/admin-panel/admin-panel';
 
 export const routes: Routes = [
 
-    {path: '', component: Home},
-    {path: 'department-budget', component: DepartmentBudget},
-    {path: 'login', component: Login},
-    {path: 'profile', component: Profile},
-    {path: 'register', component: SignUp},
-    {path: 'staff-payroll', component: StaffPayroll},
-    {path: 'student-fees', component: StudentFees},
-    {path: 'users', component: Users, canActivate: [AuthGuard], data: {roles: ['Admin']}},
-    {path: 'admin-panel', component: AdminPanel, canActivate: [AuthGuard], data: {roles: ['Admin']}},
-    {path: '**', component: NotFound},
+  {path: '', component: Home},
+  {path: 'login', component: Login},
+  {path: 'profile', component: Profile},
+  {path: 'register', component: SignUp},
+  {path: 'student-fees', component: StudentFees},
+  {path: 'staff-payroll', component: StaffPayroll},
+  {path: 'department-budget', component: DepartmentBudget},
+  {path: 'users', component: Users, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {path: 'admin-panel', component: AdminPanel, canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {path: '**', component: NotFound},
 
 ];
 
