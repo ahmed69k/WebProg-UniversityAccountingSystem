@@ -27,4 +27,9 @@ export class Navbar {
     }
     return false;
   }
+  isStaff(): boolean {
+    const role = this.user?.role?.toLowerCase();
+    const staffRoles = ['staff', 'accounting', 'accounting personnel', 'accountant', 'finance'];
+    return staffRoles.includes(role || '');
+  } 
 }

@@ -6,6 +6,9 @@
             <a routerLink="admin-panel" *ngIf="isAdmin()">Admin Panel</a> 
         </li>
         <li class="navbar__list__item">
+            <a routerLink="department-budget" *ngIf="isStaff()">Department Budget</a>
+        </li>
+        <li class="navbar__list__item">
             <a routerLink="login" *ngIf="!token">Login</a>
         </li>
         <li class="navbar__list__item">
