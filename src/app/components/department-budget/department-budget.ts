@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // Add this import
+import { FormsModule } from '@angular/forms';
 import { Department, DepartmentService} from '../../shared/departmentService/departmentService';
 import { User, UserService} from '../../shared/userService/userService';
+
 @Component({
   selector: 'app-department-budget',
   imports: [ CommonModule, FormsModule ],
@@ -11,49 +12,123 @@ import { User, UserService} from '../../shared/userService/userService';
   styleUrl: './department-budget.css',
 })
 export class DepartmentBudget {
-
-  departments: Department[] = [
-    { name: 'Computer Science', totalBudget: 500000,allocatedBudget:200000,remainingBudget:300000 },
-    { name: 'Mathematics', totalBudget: 300000, allocatedBudget:100000,remainingBudget:200000 },
-    { name: 'Physics', totalBudget: 400000, allocatedBudget:150000, remainingBudget:250000 }
-  ];
-
+  departments: Department[] = [];
   name: string = '';
   totalBudget: number = 0;
   allocatedBudget: number = 0;
   remainingBudget: number = 0;
-
   user: User;
-  token:string | null;
+  token: string | null;
 
-  constructor(private router: Router, private departmentService: DepartmentService, private userService: UserService){
+  editingDepartment: Department | null = null;
+  showForm: boolean = false;
+
+  constructor(
+    private router: Router, 
+    private departmentService: DepartmentService, 
+    private userService: UserService
+  ){
     this.departments = this.departmentService.getDepartments();
     this.token = localStorage.getItem('token')
-    this.user = userService.users.find(u=>u.token === this.token)!
-
-  }
-    onSubmit():void{
-        const currentDepartment = {
-          id: Math.floor(Math.random() * (9999-1+1)) + 1,
-          name:this.name,
-          totalBudget: this.totalBudget,
-          allocatedBudget: this.allocatedBudget,
-          remainingBudget: this.remainingBudget
-      }
-      this.departmentService.addDepartment(currentDepartment)
-
+    this.user = userService.users.find(u => u.token === this.token)!
   }
 
-  deleteDepartment(name:string){
-    const confirmed = window.confirm(`Are you sure you want to delete department with name ${name}`)
-    
-    if(confirmed){
-    this.departmentService.deleteDepartment(name);
-    this.departments = this.departmentService.departments;
+  onSubmit(): void {
+    if (this.editingDepartment) {
+      this.updateDepartment();
+    } else {
+      this.addDepartment();
     }
   }
 
-  showForm: boolean = false;
+  addDepartment(): void {
+    const currentDepartment: Department = {
+      id: Math.floor(Math.random() * (9999 - 1 + 1)) + 1,
+      name: this.name,
+      totalBudget: this.totalBudget,
+      allocatedBudget: this.allocatedBudget,
+      remainingBudget: this.totalBudget - this.allocatedBudget
+    };
+    
+    this.departmentService.addDepartment(currentDepartment);
+    this.departments = this.departmentService.getDepartments();
+    this.resetForm();
+  }
+
+  updateDepartment(): void {
+    if (!this.editingDepartment) return;
+
+    const updatedDepartment: Department = {
+      id: this.editingDepartment.id,
+      name: this.name,
+      totalBudget: this.totalBudget,
+      allocatedBudget: this.allocatedBudget,
+      remainingBudget: this.totalBudget - this.allocatedBudget
+    };
+
+    const success = this.departmentService.updateDepartment(updatedDepartment);
+    
+    if (success) {
+      this.departments = this.departmentService.getDepartments();
+      this.resetForm();
+    } else {
+      alert('Failed to update department!');
+    }
+  }
+
+  startEditDepartment(department: Department): void {
+    this.editingDepartment = department;
+    this.name = department.name;
+    this.totalBudget = department.totalBudget;
+    this.allocatedBudget = department.allocatedBudget;
+    this.remainingBudget = department.remainingBudget;
+    this.showForm = true;
+  }
+
+  cancelEdit(): void {
+    this.resetForm();
+  }
+
+  resetForm(): void {
+    this.name = '';
+    this.totalBudget = 0;
+    this.allocatedBudget = 0;
+    this.remainingBudget = 0;
+    this.editingDepartment = null;
+    this.showForm = false;
+  }
+
+  deleteDepartment(name: string): void {
+    const confirmed = window.confirm(`Are you sure you want to delete department: ${name}?`);
+    
+    if (confirmed) {
+      this.departmentService.deleteDepartment(name);
+      this.departments = this.departmentService.getDepartments();
+    }
+  }
+
+  quickUpdateBudget(department: Department, field: 'totalBudget' | 'allocatedBudget', value: number): void {
+    let remainingBudget: number;
+    
+    if (field === 'totalBudget') {
+      remainingBudget = value - department.allocatedBudget;
+    } else {
+      remainingBudget = department.totalBudget - value;
+    }
+
+    const updatedDepartment = {
+      ...department,
+      [field]: value,
+      remainingBudget: remainingBudget
+    };
+
+    this.departmentService.updateDepartment(updatedDepartment);
+    this.departments = this.departmentService.getDepartments();
+  }
+
+  calculateRemainingBudget(): void {
+    this.remainingBudget = this.totalBudget - this.allocatedBudget;
+  }
 
   getTotalBudget(): number {
     return this.departments.reduce((sum, dept) => sum + dept.totalBudget, 0);
@@ -67,11 +142,8 @@ export class DepartmentBudget {
     return this.departments.reduce((sum, dept) => sum + dept.remainingBudget, 0);
   }
 
-  isAdmin():boolean{
-    if(this.user?.role === 'Admin'){
-      return true;
-    }
-    return false;
+  isAdmin(): boolean {
+    return this.user?.role === 'Admin';
   }
 
 }

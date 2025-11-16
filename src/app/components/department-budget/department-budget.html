@@ -1,13 +1,14 @@
 <div class="department-budget">
-  <div class="header">
-    <h2 *ngIf="isAdmin()" >Department Budget Management</h2>
-    <button class="btn-primary" (click)="showForm = !showForm">
+  <div class="header" *ngIf="isAdmin()">
+    <h2>Department Budget Management</h2>
+    <button class="btn-primary" (click)="showForm = !showForm; editingDepartment = null">
       + Add Department
     </button>
   </div>
 
+  <!-- Add/Edit Department Form -->
   <div *ngIf="showForm" class="form-section">
-    <h3>Add New Department</h3>
+    <h3>{{ editingDepartment ? 'Edit Department' : 'Add New Department' }}</h3>
     <form (ngSubmit)="onSubmit()" class="department-form">
       <div class="form-group">
         <label for="name">Department Name:</label>
@@ -17,6 +18,7 @@
           [(ngModel)]="name" 
           name="name" 
           required
+          [readonly]="!!editingDepartment"
           placeholder="Enter department name">
       </div>
 
@@ -28,6 +30,7 @@
           [(ngModel)]="totalBudget" 
           name="totalBudget" 
           min="0"
+          (input)="calculateRemainingBudget()"
           required
           placeholder="Enter total budget">
       </div>
@@ -41,6 +44,7 @@
           name="allocatedBudget" 
           min="0"
           [max]="totalBudget"
+          (input)="calculateRemainingBudget()"
           required
           placeholder="Enter allocated budget">
       </div>
@@ -50,16 +54,22 @@
         <input 
           type="number" 
           id="remainingBudget"
-          [(ngModel)]="remainingBudget" 
-          name="remainingBudget" 
-          [readonly]="true"
-          [value]="totalBudget - allocatedBudget"
-          class="readonly-field">
+          [value]="remainingBudget"
+          readonly
+          class="readonly-field"
+          [class.negative]="remainingBudget < 0">
+        <small class="budget-warning" *ngIf="remainingBudget < 0">
+          ⚠️ Allocated budget exceeds total budget!
+        </small>
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn-primary">Add Department</button>
-        <button type="button" class="btn-secondary" (click)="showForm = false">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="remainingBudget < 0">
+          {{ editingDepartment ? 'Update' : 'Add' }} Department
+        </button>
+        <button type="button" class="btn-secondary" (click)="cancelEdit()">
+          Cancel
+        </button>
       </div>
     </form>
   </div>
@@ -94,7 +104,7 @@
           <th>Total Budget</th>
           <th>Allocated Budget</th>
           <th>Remaining Budget</th>
-          <th>Actions</th>
+          <th *ngIf="isAdmin()">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -106,10 +116,11 @@
               [class.positive]="dept.remainingBudget >= 0">
             ${{ dept.remainingBudget | number }}
           </td>
+          <td class="actions" *ngIf="isAdmin()">
+            <button class="btn-delete" (click)="deleteDepartment(dept.name)">Delete</button>
+          </td>
           <td class="actions">
-            <button class="btn-delete" (click)="deleteDepartment(dept.name)">
-              Delete
-            </button>
+            <button class="btn-update" (click)="startEditDepartment(dept)">Edit</button>
           </td>
         </tr>
       </tbody>
