@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router'; 
+import { UserService, User } from '../../shared/userService/userService';
 
 @Component({
   selector: 'app-admin-panel',
@@ -10,9 +11,19 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './admin-panel.css',
 })
 export class AdminPanel {
-  @Input() isAdmin: boolean = false;
 
-  constructor(private router: Router) {}
+  user:User;
+  token:string | null;
+  
+  constructor(private router: Router, userService:UserService) {
+    this.token = localStorage.getItem('token')
+    this.user = userService.users.find(u=>u.token === this.token)!
+  }
+
+  usersBgImage = './admin-panel/assets/user-management.png';
+payrollBgImage = './admin-panel/assets/staff-payroll.png';
+budgetBgImage = './admin-panel/assets/department-budget.png';
+studentFeesBgImage = './admin-panel/assets/student-fees.png';
 
   navigateToUsers() {
     this.router.navigate(['/users']);
@@ -29,4 +40,12 @@ export class AdminPanel {
   navigateToStudentFees() {
     this.router.navigate(['/student-fees']);
   }
+
+  isAdmin():boolean{
+      if(this.user?.role === 'Admin'){
+        return true;
+      }
+      return false;
+    }
+
 }
