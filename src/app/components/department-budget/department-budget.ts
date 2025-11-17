@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Department, DepartmentService} from '../../shared/departmentService/departmentService';
 import { User, UserService} from '../../shared/userService/userService';
@@ -23,8 +22,7 @@ export class DepartmentBudget {
   editingDepartment: Department | null = null;
   showForm: boolean = false;
 
-  constructor(
-    private router: Router, 
+  constructor( 
     private departmentService: DepartmentService, 
     private userService: UserService
   ){
