@@ -1,0 +1,37 @@
+<div class="admin-panel" *ngIf="isAdmin">
+  <h3>Admin Panel</h3>
+  <div class="admin-grid">
+    
+    <button class="admin-card btn-users" (click)="navigateToUsers()">
+      <div class="card-content">
+        <div class="card-icon">👥</div>
+        <h4>Users Management</h4>
+        <p>Manage system users and permissions</p>
+      </div>
+    </button>
+    
+    <button class="admin-card btn-payroll" (click)="navigateToStaffPayroll()">
+      <div class="card-content">
+        <div class="card-icon">💰</div>
+        <h4>Staff Payroll</h4>
+        <p>Process salaries and payments</p>
+      </div>
+    </button>
+    
+    <button class="admin-card btn-budget" (click)="navigateToDepartmentBudget()">
+      <div class="card-content">
+        <div class="card-icon">📊</div>
+        <h4>Department Budget</h4>
+        <p>Manage departmental finances</p>
+      </div>
+    </button>
+    
+    <button class="admin-card btn-fees" (click)="navigateToStudentFees()">
+      <div class="card-content">
+        <div class="card-icon">🎓</div>
+        <h4>Student Fees</h4>
+        <p>Handle student fee payments</p>
+      </div>
+    </button>
+  </div>
+</div>

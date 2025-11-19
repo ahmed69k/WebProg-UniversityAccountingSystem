@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
-import { UserService, User } from '../userService/userService';
+import { UserService } from '../userService/userService';
 
 @Component({
   selector: 'app-navbar',
@@ -27,4 +27,9 @@ export class Navbar {
     }
     return false;
   }
+  isStaff(): boolean {
+    const role = this.user?.role?.toLowerCase();
+    const staffRoles = ['staff', 'accounting', 'accounting personnel', 'accountant', 'finance'];
+    return staffRoles.includes(role || '');
+  } 
 }
