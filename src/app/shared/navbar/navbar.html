@@ -2,12 +2,26 @@
     <nav class="navbar">
     <a routerLink="" class="navbar__title">University Accounting System</a>
     <ul class="navbar__list">
-        <li class="navbar__list__item">
-            <a routerLink="login">Login</a>
+        <li class= "navbar__list__item">
+            <a routerLink="admin-panel" *ngIf="isAdmin()">Admin Panel</a> 
         </li>
         <li class="navbar__list__item">
-            <a routerLink="register">Sign Up</a>
+            <a routerLink="department-budget" *ngIf="isStaff()">Department Budget</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="login" *ngIf="!token">Login</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="register" *ngIf="!token">Sign Up</a>
+        </li>
+        <li class="navbar__list__item" *ngIf="token">
+            <a routerLink="profile">Profile</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="login" (click)="logout()" *ngIf="token">Logout</a>
         </li>
     </ul>
 </nav>
+
+
 </div>

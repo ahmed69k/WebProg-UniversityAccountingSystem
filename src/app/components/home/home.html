@@ -1,0 +1,45 @@
+<div class="home-container">
+  <header class="home-look">
+    <div class="hero-content">
+      <!-- For Non-Logged-In Users -->
+      <h1 class="main-title" *ngIf="!isLoggedIn()">Welcome to UAS</h1>
+      <p class="description" *ngIf="!isLoggedIn()">
+        A comprehensive platform for staff payroll, department budgeting, and student fee management
+      </p>
+      
+      <!-- For Logged-In Users -->
+      <h1 class="main-title" *ngIf="isLoggedIn()">Welcome back, {{user.name}}</h1>
+      
+      <div class="cta-buttons">
+        <button class="btn btn-outline" (click)="navigateToProfile()">
+          View Profile
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- User Types Section - Show ONLY to non-logged-in users -->
+  <section class="users-section" *ngIf="!isLoggedIn()">
+    
+    <div class="users-grid">
+      <div class="user-card" *ngFor="let user of userTypes">
+        <h4>{{ user.role }}</h4>
+        <ul>
+          <li *ngFor="let access of user.access">{{ access }}</li>
+        </ul>
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- User Types Section - Logged in users -->
+  <section class="users-section">
+    <h2>Designed For</h2>
+        <p class="description">
+        Manage students' tuition payments, departmental budgets, and staff payroll, 
+        emphasizing good architectural, proper authentication, persistence, and data visualization, 
+        testing, and performance monitoring.
+        </p>
+    </section>
+
+</div>

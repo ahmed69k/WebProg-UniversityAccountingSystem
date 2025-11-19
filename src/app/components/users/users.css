@@ -1,0 +1,18 @@
+
+.container{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: calc(100vh - 300px);
+    flex-wrap: wrap;
+
+}
+.container__title{
+    color: #667eea
+}
+.container__table{
+    width: 60%;
+    text-align: center;
+}

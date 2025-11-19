@@ -1,0 +1,17 @@
+<div class="body">
+    <div class="container">
+        <h1 class="container__text">Register</h1>
+        <form class="container__inputs" (ngSubmit)="onSubmit()">
+            <input type="text" placeholder="Name" [(ngModel)]="name" name="name">
+            <input type="email" placeholder="Email" [(ngModel)]="email" name="email">
+            <input type="password" placeholder="Password" [(ngModel)]="password" name="password">
+            <select name="Role" [(ngModel)]="role">
+                <option value="" disabled selected>Select Role</option>
+                <option value="Student"> Student</option>
+                <option value="Admin"> Admin</option>
+                <option value="Accounting Personnel"> Accounting Personnel</option>
+            </select>
+            <app-button [text]="'Submit'" [type]="'submit'"></app-button>
+        </form>
+    </div>
+</div>

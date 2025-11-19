@@ -1,0 +1,25 @@
+.container{
+    justify-items: center;
+    align-content: center;
+    height: calc(100vh - 200px);
+    text-align: center;
+}
+.container__card{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 300px;
+    width: 400px;
+    border-radius: 20px 20px 20px 20px;
+    border: 2px solid #dbdbdb92;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    gap: 20px;
+}
+.container__card h3{
+    margin-bottom: 10px;
+}
+.container__card h4{
+    margin: 0;
+}
