@@ -1,0 +1,78 @@
+/* Page container */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    gap: 25px;
+  }
+  
+  /* Staff Information Card */
+  .info-card {
+    width: 380px;
+    background: white;
+    border-radius: 20px;
+    border: 2px solid #dbdbdb92;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .info-card h4 {
+    margin: 5px 0;
+  }
+  
+  .section-title {
+    margin-top: 10px;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  
+  /* Payroll list layout */
+  .payroll-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  /* Payroll card */
+  .payroll-card {
+    width: 380px;
+    background: white;
+    border: 2px solid #dbdbdb92;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Header with Month + Net */
+  .payroll-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .net {
+    background: #e4ffe4;
+    color: #1a7f1a;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+  
+  /* Details section */
+  .payroll-details p {
+    margin: 4px 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 480px) {
+    .info-card,
+    .payroll-card {
+      width: 90%;
+    }
+  }
+  
