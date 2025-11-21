@@ -1,1 +1,30 @@
-<p>staff-payroll works!</p>
+<div class="container">
+
+    <!-- Staff Info Card -->
+    <div class="info-card">
+      <h3 style="text-decoration: underline;">Staff Information</h3>
+      <h4>Name: {{ staff.name }}</h4>
+      <h4>ID: {{ staff.id }}</h4>
+      <h4>Position: {{ staff.position }}</h4>
+    </div>
+  
+    <!-- Payroll List -->
+    <h3 class="section-title">Payroll Details</h3>
+  
+    <div class="payroll-list">
+      <div class="payroll-card" *ngFor="let p of payroll">
+        <div class="payroll-header">
+          <h3>{{ p.month }}</h3>
+          <h4 class="net">Net: {{ calculateNet(p) }} EGP</h4>
+        </div>
+  
+        <div class="payroll-details">
+          <p><strong>Base Salary:</strong> {{ p.baseSalary }} EGP</p>
+          <p><strong>Bonus:</strong> + {{ p.bonus }} EGP</p>
+          <p><strong>Deductions:</strong> - {{ p.deductions }} EGP</p>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  
