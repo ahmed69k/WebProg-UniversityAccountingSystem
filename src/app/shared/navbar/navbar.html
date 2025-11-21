@@ -28,7 +28,7 @@
 
     <ul class="navbar__list" *ngIf="isStudent()">
         <li class="navbar__list__item">
-            <a routerLink="student-fees" *ngIf="!token">Student-Fees</a>
+            <a routerLink="student-fees" *ngIf="token">Student-Fees</a>
         </li>
         <li class="navbar__list__item" *ngIf="token">
             <a routerLink="profile">Profile</a>

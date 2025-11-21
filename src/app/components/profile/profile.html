@@ -15,32 +15,7 @@
       <h4>Role: {{currentUser?.role}}</h4>
     </div>
   
-    <!-- Student Fees Section -->
-    <div class="container__card fees-card" *ngIf="currentUser?.role === 'Student'">
-      <h3 style="text-decoration: underline;"> Fees & Payments </h3>
-      <table class="fees-table">
-        <thead>
-          <tr>
-            <th>Fee Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let fee of fees">
-            <td>{{ fee.name }}</td>
-            <td>{{ fee.amount }} EGP</td>
-            <td [class.paid]="fee.status==='Paid'" [class.unpaid]="fee.status==='Unpaid'">
-              {{ fee.status }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+   
   
-      <div class="summary">
-        <p><strong>Total Due:</strong> {{ totalDue }} EGP</p>
-        <button (click)="makePayment()">Make Payment</button>
-      </div>
-    </div>
   </div>
   
