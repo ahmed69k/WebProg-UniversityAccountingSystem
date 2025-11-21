@@ -2,15 +2,15 @@
 
     <h2 class="title">Staff Payroll</h2>
   
-    <!-- Admins + Accounting Personnel: View ALL payrolls -->
-    <div *ngIf="currentUser?.role === 'Admin' || currentUser?.role === 'Accounting'">
+    <!--Accounting Personnel: View ALL payrolls -->
+    <div *ngIf="currentUser?.role === 'Accounting Personnel'">
   
-      <div *ngFor="let record of allPayrolls" class="staff-block">
+      <div *ngFor="let member of allStaff" class="staff-block">
   
-        <div class="staff-info">
-          <p><strong>Name:</strong> {{ record.staff.name }}</p>
-          <p><strong>ID:</strong> {{ record.staff.id }}</p>
-          <p><strong>Position:</strong> {{ record.staff.position }}</p>
+        <div class="staff-info" style="flex-direction: row; display: flex; gap: 30px;">
+          <p><strong>Name:</strong> {{ member.name }}</p>
+          <p><strong>ID:</strong> {{ member.id }}</p>
+          <p><strong>Email:</strong> {{ member.email }}</p>
         </div>
   
         <table class="payroll-table">
@@ -25,7 +25,7 @@
           </thead>
   
           <tbody>
-            <tr *ngFor="let p of record.payroll">
+            <tr *ngFor="let p of member.salary">
               <td>{{ p.month }}</td>
               <td>{{ p.baseSalary }} EGP</td>
               <td>{{ p.bonus }} EGP</td>
@@ -41,9 +41,7 @@
     <!-- Staff: View ONLY their own payroll -->
     <div *ngIf="currentUser?.role === 'Staff'">
       <div class="staff-info">
-        <p><strong>Name:</strong> {{ staff.name }}</p>
-        <p><strong>ID:</strong> {{ staff.id }}</p>
-        <p><strong>Position:</strong> {{ staff.position }}</p>
+        <p><strong>Name:</strong> {{ currentUser?.name }}</p>
       </div>
   
       <table class="payroll-table">
@@ -58,7 +56,7 @@
         </thead>
   
         <tbody>
-          <tr *ngFor="let p of payroll">
+          <tr *ngFor="let p of currentUser?.salary">
             <td>{{ p.month }}</td>
             <td>{{ p.baseSalary }} EGP</td>
             <td>{{ p.bonus }} EGP</td>
