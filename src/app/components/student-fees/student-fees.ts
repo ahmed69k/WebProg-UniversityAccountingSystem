@@ -1,5 +1,7 @@
+import { User, UserService } from './../../shared/userService/userService';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Fee } from './../../shared/userService/userService';
 
 @Component({
   selector: 'app-student-fees',
@@ -9,23 +11,19 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./student-fees.css']
 })
 export class StudentFees {
-  // comment 
-  
-  student = {
-    name: "John Doe",
-    id: "ST12345",
+  student: User | undefined;
+  fees: Fee[] | undefined;
+  constructor(private us:UserService){
+    this.student = this.us.users.find(u=> u.token === localStorage.getItem('token'))
+    this.fees = this.student?.fees;
   }
+   
 
-  fees = [
-    { name: 'Tuition Fee', amount: 12000, status: 'Paid' },
-    { name: 'Library Fee', amount: 400, status: 'Unpaid' },
-    { name: 'Lab Fee', amount: 700, status: 'Paid' },
-    { name: 'Technology Fee', amount: 500, status: 'Unpaid' },
-  ];
+ 
 
   get totalDue() {
-    return this.fees
-      .filter(f => f.status === 'Unpaid')
+    return(this.fees || [])
+      .filter(f => f.isPaid ===false)
       .reduce((sum, fee) => sum + fee.amount, 0);
   }
 

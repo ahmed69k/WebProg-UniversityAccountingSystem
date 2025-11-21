@@ -21,7 +21,7 @@ export const routes: Routes = [
   {path: 'register', component: SignUp},
   {path: 'student-fees', component: StudentFees},
   {path: 'staff-payroll', component: StaffPayroll},
-  {path: 'department-budget', component: DepartmentBudget, canActivate: [AuthGuard], data:{roles: ['Admin']}},
+  {path: 'department-budget', component: DepartmentBudget, canActivate: [AuthGuard], data:{roles: ['Admin', 'Staff', 'Accounting Personnel']}},
   {path: 'users', component: Users, canActivate: [AuthGuard], data: {roles: ['Admin']}},
   {path: 'admin-panel', component: AdminPanel, canActivate: [AuthGuard], data: {roles: ['Admin']}},
   {path: '**', component: NotFound},

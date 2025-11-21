@@ -2,8 +2,8 @@
     <h2 class="title">Student Fees</h2>
   
     <div class="student-info">
-      <p><strong>Name:</strong> {{ student.name }}</p>
-      <p><strong>ID:</strong> {{ student.id }}</p>
+      <p><strong>Name:</strong> {{ student?.name }}</p>
+      <p><strong>ID:</strong> {{ student?.id }}</p>
     </div>
   
     <table class="fees-table">
@@ -17,11 +17,10 @@
   
       <tbody>
         <tr *ngFor="let fee of fees">
-          <td>{{ fee.name }}</td>
+          <td>{{ fee.type }}</td>
           <td>{{ fee.amount }} EGP</td>
-          <td [class.paid]="fee.status === 'Paid'"
-              [class.unpaid]="fee.status === 'Unpaid'">
-            {{ fee.status }}
+          <td [class.paid]="fee.isPaid" [class.unpaid]="!fee.isPaid">
+            {{ fee.isPaid }}
           </td>
         </tr>
       </tbody>
