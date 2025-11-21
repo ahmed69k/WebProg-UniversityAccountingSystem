@@ -2,7 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Button } from "../../shared/button/button";
 import { Router } from '@angular/router';
-import {User, UserService } from '../../shared/userService/userService';
+import {Fee, User, UserService } from '../../shared/userService/userService';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,6 +15,7 @@ export class SignUp {
   email: string = '';
   password: string = '';
   role: string = '';
+  fees: Fee[] = [];
 
 
   constructor(private router: Router, private userSevice: UserService){}
@@ -25,7 +26,8 @@ export class SignUp {
       name:this.name,
       password: this.password,
       email: this.email,
-      role: this.role
+      role: this.role,
+      fees: []
     }
     this.userSevice.addUser(currentUser)
     }
@@ -34,7 +36,8 @@ export class SignUp {
       name:this.name,
       password: this.password,
       email: this.email,
-      role: this.role
+      role: this.role,
+      fees: []
     }
     this.userSevice.addUser(currentUser)
   }

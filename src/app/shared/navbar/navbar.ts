@@ -29,7 +29,18 @@ export class Navbar {
   }
   isStaff(): boolean {
     const role = this.user?.role?.toLowerCase();
-    const staffRoles = ['staff', 'accounting', 'accounting personnel', 'accountant', 'finance'];
+    const staffRoles = ['staff', 'accounting personnel'];
     return staffRoles.includes(role || '');
   } 
+  isStudent(): boolean {
+    if(this.user?.role === 'Student'){
+      return true;
+    }
+    return false;
+  }
+  isLoggedIn(): boolean {
+    const userData = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    return !!(userData || token);
+  }
 }

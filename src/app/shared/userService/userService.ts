@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 
+export interface Fee{
+  type: string,
+  amount: number,
+  isPaid:boolean,
+}
 export interface User{
   name: string,
   email: string,
@@ -7,6 +12,7 @@ export interface User{
   role: string,
   token?: string,
   id?:number;
+  fees: Fee[]
 }
 @Injectable({
   providedIn: 'root',
