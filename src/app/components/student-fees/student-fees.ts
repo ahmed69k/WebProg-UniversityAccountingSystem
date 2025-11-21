@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./student-fees.css']
 })
 export class StudentFees {
+  // comment 
   
   student = {
     name: "John Doe",
