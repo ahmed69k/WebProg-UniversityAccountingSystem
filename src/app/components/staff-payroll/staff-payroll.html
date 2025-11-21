@@ -1,1 +1,77 @@
-<p>staff-payroll works!</p>
+<div class="payroll-container">
+
+    <h2 class="title">Staff Payroll</h2>
+  
+    <!-- Admins + Accounting Personnel: View ALL payrolls -->
+    <div *ngIf="currentUser?.role === 'Admin' || currentUser?.role === 'Accounting'">
+  
+      <div *ngFor="let record of allPayrolls" class="staff-block">
+  
+        <div class="staff-info">
+          <p><strong>Name:</strong> {{ record.staff.name }}</p>
+          <p><strong>ID:</strong> {{ record.staff.id }}</p>
+          <p><strong>Position:</strong> {{ record.staff.position }}</p>
+        </div>
+  
+        <table class="payroll-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Base Salary</th>
+              <th>Bonus</th>
+              <th>Deductions</th>
+              <th>Net Salary</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            <tr *ngFor="let p of record.payroll">
+              <td>{{ p.month }}</td>
+              <td>{{ p.baseSalary }} EGP</td>
+              <td>{{ p.bonus }} EGP</td>
+              <td>{{ p.deductions }} EGP</td>
+              <td class="net">{{ calculateNet(p) }} EGP</td>
+            </tr>
+          </tbody>
+        </table>
+  
+      </div>
+    </div>
+  
+    <!-- Staff: View ONLY their own payroll -->
+    <div *ngIf="currentUser?.role === 'Staff'">
+      <div class="staff-info">
+        <p><strong>Name:</strong> {{ staff.name }}</p>
+        <p><strong>ID:</strong> {{ staff.id }}</p>
+        <p><strong>Position:</strong> {{ staff.position }}</p>
+      </div>
+  
+      <table class="payroll-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Base Salary</th>
+            <th>Bonus</th>
+            <th>Deductions</th>
+            <th>Net Salary</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <tr *ngFor="let p of payroll">
+            <td>{{ p.month }}</td>
+            <td>{{ p.baseSalary }} EGP</td>
+            <td>{{ p.bonus }} EGP</td>
+            <td>{{ p.deductions }} EGP</td>
+            <td class="net">{{ calculateNet(p) }} EGP</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Students: No access -->
+    <h3 *ngIf="currentUser?.role === 'Student'" class="denied">
+      You do not have permission to view payroll information.
+    </h3>
+  
+</div>
