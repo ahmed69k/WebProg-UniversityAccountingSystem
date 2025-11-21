@@ -1,18 +1,10 @@
 <div class="body">
     <nav class="navbar">
     <a routerLink="" class="navbar__title">University Accounting System</a>
-    <ul class="navbar__list">
+
+    <ul class="navbar__list" *ngIf="isAdmin()">
         <li class= "navbar__list__item">
-            <a routerLink="admin-panel" *ngIf="isAdmin()">Admin Panel</a> 
-        </li>
-        <li class="navbar__list__item">
-            <a routerLink="department-budget" *ngIf="isStaff()">Department Budget</a>
-        </li>
-        <li class="navbar__list__item">
-            <a routerLink="login" *ngIf="!token">Login</a>
-        </li>
-        <li class="navbar__list__item">
-            <a routerLink="register" *ngIf="!token">Sign Up</a>
+            <a routerLink="admin-panel">Admin Panel</a> 
         </li>
         <li class="navbar__list__item" *ngIf="token">
             <a routerLink="profile">Profile</a>
@@ -21,6 +13,40 @@
             <a routerLink="login" (click)="logout()" *ngIf="token">Logout</a>
         </li>
     </ul>
+
+    <ul class="navbar__list"  *ngIf="isStaff()">
+        <li class="navbar__list__item">
+            <a routerLink="department-budget" >Department Budget</a>
+        </li>
+        <li class="navbar__list__item" *ngIf="token">
+            <a routerLink="profile">Profile</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="login" (click)="logout()" *ngIf="token">Logout</a>
+        </li>
+    </ul>
+
+    <ul class="navbar__list" *ngIf="isStudent()">
+        <li class="navbar__list__item">
+            <a routerLink="student-fees" *ngIf="!token">Student-Fees</a>
+        </li>
+        <li class="navbar__list__item" *ngIf="token">
+            <a routerLink="profile">Profile</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="login" (click)="logout()" *ngIf="token">Logout</a>
+        </li>
+    </ul>
+
+     <ul class="navbar__list" *ngIf='!isLoggedIn()'>
+        <li class="navbar__list__item">
+            <a routerLink="login" *ngIf="!token">Login</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="register" *ngIf="!token">Sign Up</a>
+        </li>
+    </ul>
+
 </nav>
 
 

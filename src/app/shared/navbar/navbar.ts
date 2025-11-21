@@ -32,4 +32,15 @@ export class Navbar {
     const staffRoles = ['staff', 'accounting', 'accounting personnel', 'accountant', 'finance'];
     return staffRoles.includes(role || '');
   } 
+  isStudent(): boolean {
+    if(this.user?.role === 'Student'){
+      return true;
+    }
+    return false;
+  }
+  isLoggedIn(): boolean {
+    const userData = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    return !!(userData || token);
+  }
 }
