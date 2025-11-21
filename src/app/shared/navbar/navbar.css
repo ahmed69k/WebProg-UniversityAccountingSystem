@@ -96,6 +96,7 @@
     margin-top: 10px;
     padding: 8px 10px;
     gap: 5px;
+    flex-direction: column;
   }
 
   .navbar__title {
@@ -109,29 +110,6 @@
   .navbar__list__item a {
     font-size: 0.75rem;
     padding: 4px 6px;
-  }
-}
-
-/* Small Mobile (390px and below) */
-@media (max-width: 390px) {
-  .navbar {
-    justify-content: center;
-    gap: 15px;
-  }
-  
-  .navbar__title {
-    font-size: 0.85rem;
-    text-align: center;
-    order: 1;
-  }
-  
-  .navbar__list {
-    order: 2;
-  }
-
-  .navbar__list__item a {
-    font-size: 0.7rem;
-    padding: 3px 5px;
   }
 }
 
@@ -153,26 +131,5 @@
 
   .navbar__list__item a {
     font-size: 0.95rem;
-  }
-}
-
-/* Large Desktop */
-@media (min-width: 1200px) {
-  .navbar {
-    width: 85vw;
-    padding: 0 40px;
-  }
-
-  .navbar__title {
-    font-size: 1.2rem;
-    max-width: 250px;
-  }
-
-  .navbar__list {
-    gap: 25px;
-  }
-
-  .navbar__list__item a {
-    font-size: 1rem;
   }
 }
