@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UserService, User } from '../../shared/userService/userService';
 
 @Component({
   selector: 'app-staff-payroll',
@@ -10,20 +11,20 @@ import { CommonModule } from '@angular/common';
 })
 export class StaffPayroll {
 
-  staff = {
-    name: "Malak Ayman",
-    id: "EMP99812",
-    position: "Senior Accountant"
-  };
+  currentUser!: User | undefined;
+  allStaff: User[] | undefined;
 
-  payroll = [
-    { month: "January", baseSalary: 15000, bonus: 1500, deductions: 500 },
-    { month: "February", baseSalary: 15000, bonus: 1200, deductions: 400 },
-    { month: "March", baseSalary: 15000, bonus: 2000, deductions: 700 },
-  ];
+  constructor(private userService: UserService) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.currentUser = userService.users.find(u => u.token === token);
+      this.allStaff= this.userService.users.filter(u=>u.role==='Staff')
+    }
+  }
 
   calculateNet(p: any) {
     return p.baseSalary + p.bonus - p.deductions;
   }
+
 }
 

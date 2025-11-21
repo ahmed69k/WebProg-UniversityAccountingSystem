@@ -1,30 +1,75 @@
-<div class="container">
+<div class="payroll-container">
 
-    <!-- Staff Info Card -->
-    <div class="info-card">
-      <h3 style="text-decoration: underline;">Staff Information</h3>
-      <h4>Name: {{ staff.name }}</h4>
-      <h4>ID: {{ staff.id }}</h4>
-      <h4>Position: {{ staff.position }}</h4>
-    </div>
+    <h2 class="title">Staff Payroll</h2>
   
-    <!-- Payroll List -->
-    <h3 class="section-title">Payroll Details</h3>
+    <!--Accounting Personnel: View ALL payrolls -->
+    <div *ngIf="currentUser?.role === 'Accounting Personnel'">
   
-    <div class="payroll-list">
-      <div class="payroll-card" *ngFor="let p of payroll">
-        <div class="payroll-header">
-          <h3>{{ p.month }}</h3>
-          <h4 class="net">Net: {{ calculateNet(p) }} EGP</h4>
+      <div *ngFor="let member of allStaff" class="staff-block">
+  
+        <div class="staff-info" style="flex-direction: row; display: flex; gap: 30px;">
+          <p><strong>Name:</strong> {{ member.name }}</p>
+          <p><strong>ID:</strong> {{ member.id }}</p>
+          <p><strong>Email:</strong> {{ member.email }}</p>
         </div>
   
-        <div class="payroll-details">
-          <p><strong>Base Salary:</strong> {{ p.baseSalary }} EGP</p>
-          <p><strong>Bonus:</strong> + {{ p.bonus }} EGP</p>
-          <p><strong>Deductions:</strong> - {{ p.deductions }} EGP</p>
-        </div>
+        <table class="payroll-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Base Salary</th>
+              <th>Bonus</th>
+              <th>Deductions</th>
+              <th>Net Salary</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            <tr *ngFor="let p of member.salary">
+              <td>{{ p.month }}</td>
+              <td>{{ p.baseSalary }} EGP</td>
+              <td>{{ p.bonus }} EGP</td>
+              <td>{{ p.deductions }} EGP</td>
+              <td class="net">{{ calculateNet(p) }} EGP</td>
+            </tr>
+          </tbody>
+        </table>
+  
       </div>
     </div>
   
-  </div>
+    <!-- Staff: View ONLY their own payroll -->
+    <div *ngIf="currentUser?.role === 'Staff'">
+      <div class="staff-info">
+        <p><strong>Name:</strong> {{ currentUser?.name }}</p>
+      </div>
   
+      <table class="payroll-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Base Salary</th>
+            <th>Bonus</th>
+            <th>Deductions</th>
+            <th>Net Salary</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <tr *ngFor="let p of currentUser?.salary">
+            <td>{{ p.month }}</td>
+            <td>{{ p.baseSalary }} EGP</td>
+            <td>{{ p.bonus }} EGP</td>
+            <td>{{ p.deductions }} EGP</td>
+            <td class="net">{{ calculateNet(p) }} EGP</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Students: No access -->
+    <h3 *ngIf="currentUser?.role === 'Student'" class="denied">
+      You do not have permission to view payroll information.
+    </h3>
+  
+</div>
