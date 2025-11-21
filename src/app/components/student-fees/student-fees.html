@@ -1,1 +1,34 @@
-<p>student-fees works!</p>
+<div class="fees-container">
+    <h2 class="title">Student Fees</h2>
+  
+    <div class="student-info">
+      <p><strong>Name:</strong> {{ student?.name }}</p>
+      <p><strong>ID:</strong> {{ student?.id }}</p>
+    </div>
+  
+    <table class="fees-table">
+      <thead>
+        <tr>
+          <th>Fee Type</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+  
+      <tbody>
+        <tr *ngFor="let fee of fees">
+          <td>{{ fee.type }}</td>
+          <td>{{ fee.amount }} EGP</td>
+          <td [class.paid]="fee.isPaid" [class.unpaid]="!fee.isPaid">
+            {{ fee.isPaid }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div class="summary">
+      <p><strong>Total Due:</strong> {{ totalDue }} EGP</p>
+      <button (click)="makePayment()">Make Payment</button>
+    </div>
+  </div>
+  
