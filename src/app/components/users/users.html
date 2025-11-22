@@ -17,7 +17,7 @@
       <td>{{user.name}}</td>
       <td>{{user.email}}</td>
       <td>{{user.role}}</td>
-      <td><app-button [text] = "'Delete'" (click) = "deleteUser(user.email)" [style] = "'background-color: #c74134;'"></app-button></td>
+      <td><button class="delete-button" (click)="deleteUser(user.email)">Delete</button></td>
     </tr>
   </tbody>
         </table>
