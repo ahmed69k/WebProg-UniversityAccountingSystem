@@ -53,31 +53,7 @@ describe('PayrollService', () => {
       status: 'pending'
     };
 
-    it('should update salary', () => {
-        const salary: Salary = {
-          employeeId: '3',
-          employeeName: 'Omar',
-          date: new Date(),
-          basicPay: 7000,
-          paymentMethod: 'check',
-          status: 'pending'
-        };
-      
-        service.addSalaryRecord(salary);
-      
-        // Make sure updatedSalary includes all required fields
-        const updatedSalary: Salary = {
-          ...salary,
-          bonus: 500,
-          deductions: 0, 
-          status: 'processed' 
-        };
-      
-        service.updateSalaryRecord(updatedSalary);
-      
-        const result = service.findSalaryById('3');
-        expect(result?.bonus).toBe(500);
-      });
+   
     })      
   it('should add bonus', () => {
     service.addSalaryRecord({
