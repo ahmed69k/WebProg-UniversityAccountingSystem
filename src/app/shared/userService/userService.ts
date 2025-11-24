@@ -9,8 +9,8 @@ export interface Fee{
 export interface Salary{
   month:string,
   baseSalary: number,
-  bonus:number,
-  deductions: number
+  bonus?:number,
+  deductions?: number
 }
 
 export interface User{

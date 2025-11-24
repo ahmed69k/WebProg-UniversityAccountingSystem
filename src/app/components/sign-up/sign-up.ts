@@ -21,7 +21,7 @@ export class SignUp {
 
   constructor(private router: Router, private userSevice: UserService){}
   onSubmit():void{
-    if(this.userSevice.findUser(this.email)){
+    if(this.userSevice.findUser(this.email)!== undefined){
       alert("Email already in use!")
       return;
     }

@@ -34,8 +34,27 @@
             </tr>
           </tbody>
         </table>
-  
+
       </div>
+            <form (ngSubmit)="addSalary()">
+            <select name="month" [(ngModel)]="month">
+              <option value=""disabled selected> Select a month...</option>
+              <option value="January">January</option>
+              <option value="February">February</option>
+              <option value="March">March</option>
+              <option value="April">April</option>
+              <option value="May">May</option>
+              <option value="June">June</option>
+              <option value="July">July</option>
+              <option value="August">August</option>
+              <option value="September">September</option>
+              <option value="October">October</option>
+              <option value="November">November</option>
+              <option value="December">December</option>
+            </select>
+            <input type="number" placeholder="Salary in EGP" [(ngModel)] = "salary" name="salary">
+            <app-button type="submit" [text]="'Add Payroll'"></app-button>
+          </form>
     </div>
   
     <!-- Staff: View ONLY their own payroll -->
@@ -65,6 +84,9 @@
           </tr>
         </tbody>
       </table>
+      <div style="text-align: center; margin-top: 50px;">
+        <app-button (click)="exportDataToJson()" style="--btn-width: 200px" [text]="'Download Payroll Data'"> </app-button>
+      </div>
     </div>
   
     <!-- Students: No access -->
