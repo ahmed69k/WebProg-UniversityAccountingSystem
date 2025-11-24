@@ -21,6 +21,10 @@ export class SignUp {
 
   constructor(private router: Router, private userSevice: UserService){}
   onSubmit():void{
+    if(this.userSevice.findUser(this.email)!== undefined){
+      alert("Email already in use!")
+      return;
+    }
     if(this.role ==='Student'){
           const currentUser = {
       id: Math.floor(Math.random() * (13009999-13000001+1)) + 13000001,
