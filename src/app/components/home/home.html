@@ -10,11 +10,16 @@
       <!-- For Logged-In Users -->
       <h1 class="main-title" *ngIf="isLoggedIn()">Welcome back, {{user.name}}</h1>
       
-      <div class="cta-buttons">
-        <button class="btn btn-outline" (click)="navigateToProfile()">
-          View Profile
-        </button>
-      </div>
+<div class="cta-buttons" style="display: flex; justify-content: center; gap: 20px;">
+  <ng-container *ngIf="!token; else loggedIn">
+    <button class="btn btn-outline" (click)="navigateToLogin()">Login</button>
+    <button class="btn btn-outline" (click)="navigateToSignUp()">Register</button>
+  </ng-container>
+
+  <ng-template #loggedIn>
+    <button class="btn btn-outline" (click)="navigateToProfile()">Profile</button>
+  </ng-template>
+</div>
     </div>
   </header>
 

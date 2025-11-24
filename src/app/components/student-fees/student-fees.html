@@ -1,44 +1,11 @@
 <div class="fees-container">
-  <h2 class="title">Student Fees</h2>
-
-  <!-- Accounting: See all students -->
-  <div *ngIf="isAccounting">
-    <div *ngFor="let student of allStudents" class="student-block">
-      <div class="student-info">
-        <p><strong>Name:</strong> {{ student.name }}</p>
-        <p><strong>ID:</strong> {{ student.id }}</p>
-      </div>
-
-      <table class="fees-table">
-        <thead>
-          <tr>
-            <th>Fee Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let fee of feesForStudent(student.id)">
-            <td>{{ fee.type }}</td>
-            <td>{{ fee.amount }} EGP</td>
-            <td [class.paid]="fee.isPaid" [class.unpaid]="!fee.isPaid">{{ fee.isPaid ? 'Paid' : 'Unpaid' }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="summary">
-        <p><strong>Total Due:</strong> {{ totalDue(feesForStudent(student.id)) }} EGP</p>
-        <button (click)="makePayment()">Make Payment</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Student: see own fees only -->
-  <div *ngIf="isStudent">
+    <h2 class="title">Student Fees</h2>
+  
     <div class="student-info">
-      <p><strong>Name:</strong> {{ currentUser.name }}</p>
-      <p><strong>ID:</strong> {{ currentUser.id }}</p>
+      <p><strong>Name:</strong> {{ student?.name }}</p>
+      <p><strong>ID:</strong> {{ student?.id }}</p>
     </div>
-
+  
     <table class="fees-table">
       <thead>
         <tr>
@@ -47,22 +14,21 @@
           <th>Status</th>
         </tr>
       </thead>
+  
       <tbody>
-        <tr *ngFor="let fee of feesForStudent(currentUser.id)">
+        <tr *ngFor="let fee of fees">
           <td>{{ fee.type }}</td>
           <td>{{ fee.amount }} EGP</td>
-          <td [class.paid]="fee.isPaid" [class.unpaid]="!fee.isPaid">{{ fee.isPaid ? 'Paid' : 'Unpaid' }}</td>
+          <td [class.paid]="fee.isPaid" [class.unpaid]="!fee.isPaid">
+            {{ fee.isPaid }}
+          </td>
         </tr>
       </tbody>
     </table>
+  
     <div class="summary">
-      <p><strong>Total Due:</strong> {{ totalDue(feesForStudent(currentUser.id)) }} EGP</p>
+      <p><strong>Total Due:</strong> {{ totalDue }} EGP</p>
       <button (click)="makePayment()">Make Payment</button>
     </div>
   </div>
-
-  <!-- Admin/Staff: denied -->
-  <h3 *ngIf="isDenied" class="denied">
-    You do not have permission to view student fees.
-  </h3>
-</div>
+  
