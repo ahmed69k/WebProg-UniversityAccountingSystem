@@ -5,6 +5,14 @@ export interface Fee{
   amount: number,
   isPaid:boolean,
 }
+
+export interface Salary{
+  month:string,
+  baseSalary: number,
+  bonus:number,
+  deductions: number
+}
+
 export interface User{
   name: string,
   email: string,
@@ -12,7 +20,8 @@ export interface User{
   role: string,
   token?: string,
   id?:number;
-  fees: Fee[]
+  fees: Fee[],
+  salary: Salary[]
 }
 @Injectable({
   providedIn: 'root',
