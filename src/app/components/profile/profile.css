@@ -1,25 +1,137 @@
 .container{
     justify-items: center;
     align-content: center;
-    height: calc(100vh - 200px);
+    height: auto;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
 }
 .container__card{
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    height: 300px;
+    height: auto;
     width: 400px;
     border-radius: 20px 20px 20px 20px;
     border: 2px solid #dbdbdb92;
     background-color: white;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
 }
 .container__card h3{
     margin-bottom: 10px;
 }
 .container__card h4{
     margin: 0;
+}
+
+/* Settings container for horizontal layout */
+.settings-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.settings-card {
+    width: 350px;
+    min-height: 200px;
+}
+
+/* Additional styles for the form elements */
+.profile-section {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+}
+
+.profile-section:last-child {
+    border-bottom: none;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+.toggle-btn {
+    background-color: #2196F3;
+    width: 100%;
+}
+
+.toggle-btn:hover {
+    background-color: #1976D2;
+}
+
+.profile-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+}
+
+.profile-picture-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .settings-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .settings-card {
+        width: 400px;
+    }
 }

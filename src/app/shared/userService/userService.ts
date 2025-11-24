@@ -21,7 +21,8 @@ export interface User{
   token?: string,
   id?:number;
   fees: Fee[],
-  salary: Salary[]
+  salary: Salary[],
+  profilePicture?: string,
 }
 @Injectable({
   providedIn: 'root',
@@ -67,5 +68,23 @@ export class UserService {
     localStorage.setItem('users',JSON.stringify(this.users))
     console.log("User Deleted!")
   }
+
+  updateUser(updatedUser: User){
+    const index = this.users.findIndex(u => u.email === updatedUser.email)
+
+    if(index !== -1){
+      this.users[index] = updatedUser;
+      localStorage.setItem('users', JSON.stringify(this.users))
+    }
+  }
+
+  addProfilePicture(email:string, pictureData:string){
+    const user = this.findUser(email)
+    if(user){
+      user.profilePicture = pictureData;
+      this.updateUser(user)
+    }
+  }
+  
   
 }

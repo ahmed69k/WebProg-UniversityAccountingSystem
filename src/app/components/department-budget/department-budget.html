@@ -94,6 +94,37 @@
     </div>
   </div>
 
+  <!-- Summary Charts Section -->
+<div class="charts-section">
+  <h3>Budget Analytics</h3>
+  
+  <div class="charts-grid">
+    <!-- Budget Overview Chart -->
+    <div class="chart-container">
+      <div class="chart-card">
+        <h4>Department Budget Overview</h4>
+        <canvas #budgetChart></canvas>
+      </div>
+    </div>
+
+    <!-- Budget Distribution Chart -->
+    <div class="chart-container">
+      <div class="chart-card">
+        <h4>Budget Distribution</h4>
+        <canvas #distributionChart></canvas>
+      </div>
+    </div>
+
+    <!-- Utilization Chart -->
+    <div class="chart-container">
+      <div class="chart-card">
+        <h4>Budget Utilization</h4>
+        <canvas #utilizationChart></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!-- Departments Table -->
   <div class="departments-table" *ngIf="departments.length > 0">
     <h3>Department List</h3>
