@@ -133,9 +133,6 @@
   
     /* Make table scroll horizontally */
     .fees-table {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
     }
   
     .summary {
