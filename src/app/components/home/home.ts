@@ -54,7 +54,7 @@ export class Home {
   }
 
   navigateToSignUp() {
-    this.router.navigate(['/sign-up']);
+    this.router.navigate(['/register']);
   }
 
 }
