@@ -18,8 +18,13 @@ export class Login {
   constructor(private router:Router, private userService: UserService){}
   login(){
     const currentUser = this.userService.findUser(this.email); 
+    if(this.email.trim().length===0 || this.password.trim().length===0){
+      alert("Please enter your credentials!")
+      return;
+    } 
     if(!currentUser){
       console.log('User not found!')
+      alert("User not found!")
       return;
     } 
     
