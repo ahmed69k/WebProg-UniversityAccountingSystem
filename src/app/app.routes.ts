@@ -3,6 +3,7 @@ import { RouterModule ,Routes } from '@angular/router';
 
 import { Home } from './components/home/home';
 import { AuthGuard } from './middleware/authentication/auth-guard';
+import { ChatAiComponent } from './components/chat-ai/chat-ai';
 
 export const routes: Routes = [
 
@@ -23,6 +24,7 @@ export const routes: Routes = [
   },
   {path: 'users', loadComponent: () => import('./components/users/users').then(m => m.Users), canActivate: [AuthGuard], data: {roles: ['Admin']}},
   {path: 'admin-panel', loadComponent: () => import('./components/admin-panel/admin-panel').then(m => m.AdminPanel), canActivate: [AuthGuard], data: {roles: ['Admin']}},
+  {path: 'chat', component: ChatAiComponent},
   {path: '**', loadComponent: () => import('./components/not-found/not-found').then(m => m.NotFound)},
 
 ];

@@ -1,11 +1,23 @@
-<div class="chat-container">
+<div class="chat-widget-container">
+    <div class="chat-container" *ngIf="isToggled" [class.closing]="isClosing">
+    <div class="chat-header">
+        <button class="minimize-button" (click)="toggleChatWindow()">&#8964;</button>
+        <span class="chat-title">AI Chat</span>
+    </div>
     <div class="message-history">
         <div *ngFor="let message of messages" [ngClass]="message.sender" class="message-bubble">
             <span class="sender-tag">{{ message.sender === 'user' ? 'You' : 'AI' }}:</span>
             <p>{{ message.text }}</p>
         </div>
         <div *ngIf="messages.length === 0" class="message-bubble" ngClass="ai">
-            Start a conversation with Gemini!
+            Start a conversation with AI!
+        </div>
+        <!-- Loading Indicator -->
+        <div *ngIf="isLoading" class="message-bubble ai loading-bubble">
+            <span class="sender-tag">AI:</span>
+            <div class="loading-dots">
+                <span class="loading-dot"></span><span class="loading-dot"></span><span class="loading-dot"></span>
+            </div>
         </div>
     </div>
 
@@ -19,4 +31,11 @@
         >
         <button type="submit" [disabled]="!userInput.trim()">Send</button>
     </form>
+</div>
+
+<div class="chat-toggle-button" *ngIf="!isToggled" [class.opening]="!isToggled">
+    <button (click)="toggleChatWindow()">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKRsT6e2EwN5uAcO9s-VUwrw0_2wl-U3Sq_w&s" alt="Open Chat">
+    </button>
+</div>
 </div>
