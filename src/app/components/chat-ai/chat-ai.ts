@@ -70,7 +70,7 @@ export class ChatAiComponent {
   }
 
   private playNotificationSound(): void {
-    const audio = new Audio('assets/notification.mp3');
+    const audio = new Audio("assets/notification.mp3");
     audio.play();
   }
 }
