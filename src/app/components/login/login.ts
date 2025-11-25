@@ -18,7 +18,10 @@ export class Login {
   constructor(private router:Router, private userService: UserService){}
   login(){
     const currentUser = this.userService.findUser(this.email); 
-    if(!currentUser) console.log('User not found!')
+    if(!currentUser){
+      console.log('User not found!')
+      return;
+    } 
     
     if(currentUser?.password !== this.password){
       alert("Incorrect Password!")

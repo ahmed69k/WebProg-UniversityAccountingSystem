@@ -55,7 +55,7 @@ export class StaffPayroll {
       alert('Month cannot be empty!')
       return;
     }
-    if(this.month=== ''){
+    if(this.salary === 0){
       alert('Salary cannot be 0!')
       return;
     }
@@ -69,4 +69,3 @@ export class StaffPayroll {
   }
 
 }
-

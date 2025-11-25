@@ -1,70 +1,70 @@
 <div class="container">
-    <div class="container__card">
-        <h3 style="text-decoration: underline;"> Account Information </h3>
-        
-        <!-- Profile Picture Section -->
-        <div class="profile-section">
-            <h4>Profile Picture</h4>
-            <img *ngIf="currentUser?.profilePicture" [src]="currentUser?.profilePicture" alt="Profile Picture" class="profile-picture">
-            <div *ngIf="!currentUser?.profilePicture" class="profile-picture-placeholder">
-                No Image
-            </div>
-            <div class="form-group">
-                <label for="profilePicture">Change Profile Picture:</label>
-                <input type="file" id="profilePicture" (change)="changeProfilePicture($event)" accept="image/*">
-            </div>
+  <div class="container__card">
+    <h3>Account Information</h3>
+    <div class="profile-grid">
+      <!-- Profile Picture Section -->
+      <div class="profile-picture-section">
+        <img *ngIf="currentUser?.profilePicture" [src]="currentUser?.profilePicture" alt="Profile Picture" class="profile-picture">
+        <div *ngIf="!currentUser?.profilePicture" class="profile-picture-placeholder">
+          No Image
         </div>
-        
-        <!-- User Information Section -->
-        <div class="profile-section">
-            <h4>ID: {{currentUser?.id}}</h4>
-            <h4>Username: {{currentUser?.name}}</h4>
-            <h4>Email: {{currentUser?.email}}</h4>
-            <h4>Role: {{currentUser?.role}}</h4>
-        </div>
+        <label for="profilePicture">
+          <button class="btn">Change Picture</button>
+        </label>
+        <input type="file" id="profilePicture" (change)="changeProfilePicture($event)" accept="image/*" style="display: none;" />
+      </div>
 
-        <!-- Toggle Settings Button -->
-        <button class="btn toggle-btn" (click)="showSettings = !showSettings">
-            {{ showSettings ? 'Hide Settings' : 'Show Settings' }}
-        </button>
+      <!-- User Information Section -->
+      <div class="profile-details-section">
+        <p><strong>ID:</strong> {{currentUser?.id}}</p>
+        <p><strong>Username:</strong> {{currentUser?.name}}</p>
+        <p><strong>Email:</strong> {{currentUser?.email}}</p>
+        <p><strong>Role:</strong> {{currentUser?.role}}</p>
+      </div>
     </div>
 
-    <!-- Settings Container - Only shown when showSettings is true -->
-    <div class="settings-container" *ngIf="showSettings">
-        <!-- Change Username Section -->
-        <div class="container__card settings-card">
-            <h3 style="text-decoration: underline;">Change Username</h3>
-            <div class="form-group">
-                <label for="newUsername">New Username:</label>
-                <input type="text" id="newUsername" #usernameInput>
-            </div>
-            <button class="btn" (click)="changeUsername(usernameInput.value); usernameInput.value=''">
-                Update Username
-            </button>
-        </div>
+    <!-- Toggle Settings Button -->
+    <button class="btn toggle-btn" (click)="showSettings = !showSettings">
+      {{ showSettings ? 'Hide Settings' : 'Show Settings' }}
+    </button>
+  </div>
 
-        <!-- Change Email Section -->
-        <div class="container__card settings-card">
-            <h3 style="text-decoration: underline;">Change Email</h3>
-            <div class="form-group">
-                <label for="newEmail">New Email:</label>
-                <input type="email" id="newEmail" #emailInput>
-            </div>
-            <button class="btn" (click)="changeEmail(emailInput.value); emailInput.value=''">
-                Update Email
-            </button>
-        </div>
-
-        <!-- Change Password Section -->
-        <div class="container__card settings-card">
-            <h3 style="text-decoration: underline;">Change Password</h3>
-            <div class="form-group">
-                <label for="newPassword">New Password:</label>
-                <input type="password" id="newPassword" #passwordInput>
-            </div>
-            <button class="btn" (click)="changePassword(passwordInput.value); passwordInput.value=''">
-                Update Password
-            </button>
-        </div>
+  <!-- Settings Container - Only shown when showSettings is true -->
+  <div class="settings-container" *ngIf="showSettings">
+    <!-- Change Username Section -->
+    <div class="container__card settings-card">
+      <h3>Change Username</h3>
+      <div class="form-group">
+        <label for="newUsername">New Username:</label>
+        <input type="text" id="newUsername" #usernameInput>
+      </div>
+      <button class="btn" (click)="changeUsername(usernameInput.value); usernameInput.value=''">
+        Update Username
+      </button>
     </div>
+
+    <!-- Change Email Section -->
+    <div class="container__card settings-card">
+      <h3>Change Email</h3>
+      <div class="form-group">
+        <label for="newEmail">New Email:</label>
+        <input type="email" id="newEmail" #emailInput>
+      </div>
+      <button class="btn" (click)="changeEmail(emailInput.value); emailInput.value=''">
+        Update Email
+      </button>
+    </div>
+
+    <!-- Change Password Section -->
+    <div class="container__card settings-card">
+      <h3>Change Password</h3>
+      <div class="form-group">
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" #passwordInput>
+      </div>
+      <button class="btn" (click)="changePassword(passwordInput.value); passwordInput.value=''">
+        Update Password
+      </button>
+    </div>
+  </div>
 </div>
