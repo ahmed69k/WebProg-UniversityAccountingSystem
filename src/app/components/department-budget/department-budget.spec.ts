@@ -381,6 +381,26 @@ describe('DepartmentBudgetComponent', () => {
 
   // Test 9: Template Rendering
   describe('Template Rendering', () => {
+    beforeEach(() => {
+      // Use fresh data to avoid contamination from other tests
+      component.departments = [
+        {
+          id: 1,
+          name: 'Engineering',
+          totalBudget: 100000,
+          allocatedBudget: 80000,
+          remainingBudget: 20000
+        },
+        {
+          id: 2,
+          name: 'Marketing',
+          totalBudget: 50000,
+          allocatedBudget: 45000,
+          remainingBudget: 5000
+        }
+      ];
+    });
+
     it('should show admin controls when user is admin', () => {
       component.user = mockUserService.users[0]; // Admin
       fixture.detectChanges();
