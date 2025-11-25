@@ -20,9 +20,11 @@ export class ChatAiComponent {
   userInput = '';
   messages: { sender: 'user' | 'ai', text: string }[] = [];
   private readonly GEMINI_API_KEY = environment.GEMINI_API
-  ai: GoogleGenAI = new GoogleGenAI({ apiKey: this.GEMINI_API_KEY });
 
-  constructor() {} 
+  constructor(private ai: GoogleGenAI) {
+    // The 'ai' instance is now provided by Angular's DI system.
+    // In tests, this will be the mock. In the app, it needs to be provided.
+  } 
   
   toggleChatWindow() {
     if (this.isToggled) {
