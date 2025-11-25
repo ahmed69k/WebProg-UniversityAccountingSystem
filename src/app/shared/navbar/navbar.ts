@@ -29,9 +29,13 @@ export class Navbar {
   }
   isStaff(): boolean {
     const role = this.user?.role?.toLowerCase();
-    const staffRoles = ['staff', 'accounting personnel'];
+    const staffRoles = ['staff'];
     return staffRoles.includes(role || '');
   } 
+isAccounting(): boolean {
+  return this.user?.role === 'Accounting Personnel';
+}
+
   isStudent(): boolean {
     if(this.user?.role === 'Student'){
       return true;

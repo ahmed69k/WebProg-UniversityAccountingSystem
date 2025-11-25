@@ -14,12 +14,24 @@
         </li>
     </ul>
 
-    <ul class="navbar__list"  *ngIf="isStaff()">
+    <ul class="navbar__list"  *ngIf="isAccounting()">
         <li class="navbar__list__item">
             <a routerLink="staff-payroll">Payroll</a>
         </li>
         <li class="navbar__list__item">
             <a routerLink="department-budget" >Department Budget</a>
+        </li>
+        <li class="navbar__list__item" *ngIf="token">
+            <a routerLink="profile">Profile</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="login" (click)="logout()" *ngIf="token">Logout</a>
+        </li>
+        
+    </ul>
+        <ul class="navbar__list"  *ngIf="isStaff()">
+        <li class="navbar__list__item">
+            <a routerLink="staff-payroll">Payroll</a>
         </li>
         <li class="navbar__list__item" *ngIf="token">
             <a routerLink="profile">Profile</a>
