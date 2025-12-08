@@ -1,4 +1,4 @@
-import { Salary } from './../../shared/userService/userService';
+import { Salary } from '../../shared/userService/userService';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService, User } from '../../shared/userService/userService';

@@ -1,7 +1,7 @@
-import { User, UserService } from './../../shared/userService/userService';
+import { User, UserService } from '../../shared/userService/userService';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Fee } from './../../shared/userService/userService';
+import { Fee } from '../../shared/userService/userService';
 
 @Component({
   selector: 'app-student-fees',
