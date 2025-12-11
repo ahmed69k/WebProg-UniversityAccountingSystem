@@ -17,9 +17,10 @@ const mockUserService = {
       email: 'test@example.com',
       password: 'password',
       role: 'admin',
-      token: 'test-token-123',
-      fees: [],
-      salary: []
+      created_at: "1",
+      updated_at:"2",
+      credit_card:"1234567890123456",
+      id:2
     }
   ],
   findUser: jasmine.createSpy('findUser')
@@ -208,8 +209,10 @@ describe('HomeComponent', () => {
         email: 'john@example.com',
         password: 'password', 
         role: 'user',
-        fees: [],
-        salary: []
+        id: 1,
+        created_at:"1",
+        updated_at: "1",
+        credit_card:"1234567890123456",
       } as User;
       
       spyOn(component, 'isLoggedIn').and.returnValue(true);

@@ -16,11 +16,13 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'profile_picture'
+        'profile_picture',
+        "credit_card"
     ];
 
     protected $hidden = [
         'password',
+        'credit_card'
     ];
 
     public function fee(){

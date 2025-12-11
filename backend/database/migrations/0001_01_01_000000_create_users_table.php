@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('role');
             $table->string('profile_picture')->nullable();
+            $table->string('credit_card',16);
             $table->timestamps();
         });
     }

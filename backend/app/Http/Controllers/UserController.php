@@ -35,6 +35,7 @@ class UserController extends Controller
             'password'=>'required|string|min:6',
             'role'=>'required|in:Admin,Accounting Personnel,Student,Staff',
             'profile_picture'=>'nullable|string',
+            'credit_card'=>"required|string|min:16|max:16"
         ]);
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
@@ -80,6 +81,42 @@ class UserController extends Controller
             'message'=> 'Logged out successfully!'
         ]);
     }
+    public function update(Request $request, $id){
+        $user = User::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:users,email,' . $id,
+            'password' => 'sometimes|string|min:6',
+            'profile_picture' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif|max:2048|nullable'
+
+        ]);
+        if(isset($validated['password'])){
+            $validated['password'] = Hash::make($validated['password']);
+        }
+        if($request->hasFile('profile_picture')){
+            $file = $request->file('profile_picture');
+            $filename = uniqid().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('profile_pictures'),$filename);
+            $validated['profile_picture']=url('profile_pictures/'.$filename);
+        }
+        $user->update($validated);
+        if($user->profile_picture){
+            $user->profile_picture = url($user->profile_picture);
+        }
+        return response()->json([
+            'message'=>'User updated successfully!',
+            'user'=>$user,
+            'affected_fields'=>$validated
+        ],200);
+    }
+    public function getCreditCard(Request $request){
+        $user = $request->user();
+        $credit = $user->credit_card;
+        return response()->json([
+            'message'=>"Credit card retrieved.",
+            'credit_card'=>$credit
+        ]);
+    }
 
     /**
      * Display the specified resource.
@@ -97,13 +134,6 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

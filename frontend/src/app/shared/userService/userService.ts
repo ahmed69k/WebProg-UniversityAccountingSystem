@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { ToastService } from '../ToastService';
 
 export interface Fee{
@@ -21,8 +21,8 @@ export interface User{
   email: string,
   role: string,
   id:number;
-  profilePicture?: string,
-  create_at:string,
+  profile_picture?: string,
+  created_at:string,
   updated_at:string
 }
 @Injectable({
@@ -63,7 +63,36 @@ export class UserService {
     )
   }
   getCurrentUser(){
-    return this.http.get<{message:string, user:User}>(`${this.apiUrl}/profile`,{withCredentials:true})
+    return this.http.get<{message:string, user:User}>(`${this.apiUrl}/profile`,{
+      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+    }).pipe(tap({
+      next: res=>{
+        this.user = res.user;
+      }
+    }))
   }
+  updateUser(userData:any){
+    let body: any;
+    let headers:any= {Authorization: `Bearer ${localStorage.getItem('token')}`}
+
+    if(userData instanceof FormData) {
+      body = userData;
+    }
+    else{
+      body = userData;
+      headers['Content-Type'] = 'application/json'
+    }
+    return this.http.put<{message:string, user:User,affected_fields:{[key:string]:string|number|null}}>(`${this.apiUrl}/user/${this.user?.id}`, body, {headers}
+    ).pipe(tap( res=>{
+        this.user = res.user
+      }
+    ))
+  }
+  getUserCreditCard(){
+    return this.http.get<{message:string,credit_card:string}>(`${this.apiUrl}/user/credit`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
+      .pipe( map(res=>res.credit_card))
+  }
+
+
   
 }

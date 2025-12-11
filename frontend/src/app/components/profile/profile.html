@@ -3,16 +3,17 @@
     <h3>Account Information</h3>
     <div class="profile-grid">
       <!-- Profile Picture Section -->
-      <div class="profile-picture-section">
-        <img *ngIf="currentUser?.profilePicture" [src]="currentUser?.profilePicture" alt="Profile Picture" class="profile-picture">
-        <div *ngIf="!currentUser?.profilePicture" class="profile-picture-placeholder">
-          No Image
-        </div>
-        <label for="profilePicture">
-          <button class="btn">Change Picture</button>
-        </label>
-        <input type="file" id="profilePicture" (change)="changeProfilePicture($event)" accept="image/*" style="display: none;" />
-      </div>
+<div class="profile-picture-section">
+  <img *ngIf="currentUser?.profile_picture" [src]="currentUser?.profile_picture" alt="Profile Picture" class="profile-picture">
+  <div *ngIf="!currentUser?.profile_picture" class="profile-picture-placeholder">
+    No Image
+  </div>
+
+  <!-- Pass the input element directly to the method -->
+  <button class="btn" (click)="triggerFileInput(fileInput)">Change Picture</button>
+  <input type="file" #fileInput (change)="changeProfilePicture($event)" accept="image/*" style="display:none" />
+</div>
+
 
       <!-- User Information Section -->
       <div class="profile-details-section">

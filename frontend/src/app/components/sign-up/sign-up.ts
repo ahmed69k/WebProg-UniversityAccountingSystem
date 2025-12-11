@@ -16,7 +16,7 @@ export class SignUp {
   email: string = '';
   password: string = '';
   role: string = '';
-  creditNumber: string = "";
+  creditNumber: string='';
 
 
   constructor(private router: Router, private userSevice: UserService, private toast:ToastService){}
@@ -26,7 +26,8 @@ export class SignUp {
       name: this.name,
       email: this.email,
       password:this.password,
-      role:this.role
+      role:this.role,
+      credit_card:this.creditNumber
     }
     this.userSevice.register(payload).subscribe({
         next: (res)=>{

@@ -2,49 +2,46 @@
   <header class="home-look">
     <div class="hero-content">
       <!-- For Non-Logged-In Users -->
-      <h1 class="main-title" *ngIf="!isLoggedIn()">Welcome to UAS</h1>
-      <p class="description" *ngIf="!isLoggedIn()">
-        A comprehensive platform for staff payroll, department budgeting, and student fee management
-      </p>
-      
-      <!-- For Logged-In Users -->
-      <h1 class="main-title" *ngIf="isLoggedIn()">Welcome back, {{user.name}}</h1>
-      
-<div class="cta-buttons" style="display: flex; justify-content: center; gap: 20px;">
-  <ng-container *ngIf="!token; else loggedIn">
-    <button class="btn btn-outline" (click)="navigateToLogin()">Login</button>
-    <button class="btn btn-outline" (click)="navigateToSignUp()">Register</button>
-  </ng-container>
+      <ng-container *ngIf="!isLoggedIn(); else loggedIn">
+        <h1 class="main-title">Welcome to UAS</h1>
+        <p class="description">
+          A comprehensive platform for staff payroll, department budgeting, and student fee management
+        </p>
+        <div class="cta-buttons" style="display: flex; justify-content: center; gap: 20px;">
+          <button class="btn btn-outline" (click)="navigateToLogin()">Login</button>
+          <button class="btn btn-outline" (click)="navigateToSignUp()">Register</button>
+        </div>
+      </ng-container>
 
-  <ng-template #loggedIn>
-    <button class="btn btn-outline" (click)="navigateToProfile()">Profile</button>
-  </ng-template>
-</div>
+      <!-- For Logged-In Users -->
+      <ng-template #loggedIn>
+        <h1 class="main-title">Welcome back, {{ currentUser?.name }}</h1>
+        <div class="cta-buttons" style="display: flex; justify-content: center; gap: 20px;">
+          <button class="btn btn-outline" (click)="navigateToProfile()">Profile</button>
+        </div>
+      </ng-template>
     </div>
   </header>
 
   <!-- User Types Section - Show ONLY to non-logged-in users -->
   <section class="users-section" *ngIf="!isLoggedIn()">
-    
     <div class="users-grid">
-      <div class="user-card" *ngFor="let user of userTypes">
-        <h4>{{ user.role }}</h4>
+      <div class="user-card" *ngFor="let userType of userTypes">
+        <h4>{{ userType.role }}</h4>
         <ul>
-          <li *ngFor="let access of user.access">{{ access }}</li>
+          <li *ngFor="let access of userType.access">{{ access }}</li>
         </ul>
       </div>
     </div>
-    
   </section>
 
-  <!-- User Types Section - Logged in users -->
+  <!-- General Section - Show to all users -->
   <section class="users-section">
     <h2>Designed For</h2>
-        <p class="description">
-        Manage students' tuition payments, departmental budgets, and staff payroll, 
-        emphasizing good architectural, proper authentication, persistence, and data visualization, 
-        testing, and performance monitoring.
-        </p>
-    </section>
-
+    <p class="description">
+      Manage students' tuition payments, departmental budgets, and staff payroll, 
+      emphasizing good architectural design, proper authentication, persistence, data visualization, 
+      testing, and performance monitoring.
+    </p>
+  </section>
 </div>

@@ -1,9 +1,9 @@
-<div class="fees-container">
+<div class="fees-container" *ngIf="!loading">
     <h2 class="title">Student Fees</h2>
   
     <div class="student-info">
-      <p><strong>Name:</strong> {{ student?.name }}</p>
-      <p><strong>ID:</strong> {{ student?.id }}</p>
+      <p><strong>Name:</strong> {{ currentUser?.name }}</p>
+      <p><strong>ID:</strong> {{ currentUser?.id }}</p>
     </div>
   
     <table class="fees-table">
@@ -11,7 +11,7 @@
         <tr>
           <th>Fee Type</th>
           <th>Amount</th>
-          <th>Status</th>
+          <th>Paid?</th>
         </tr>
       </thead>
   
@@ -30,5 +30,8 @@
       <p><strong>Total Due:</strong> {{ totalDue }} EGP</p>
       <button (click)="makePayment()">Make Payment</button>
     </div>
+  </div>
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
   </div>
   

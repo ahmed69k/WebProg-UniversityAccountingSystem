@@ -100,6 +100,36 @@ class FeeController extends Controller
             'fee'=>$fee
         ]);
     }
+    public function getUserFees(Request $request){
+        $user = $request->user();
+        if($user->role !== "Student"){
+            return response()->json([
+                'message'=>"This data is meant only for students!",
+                'role'=> $user->role
+            ],500);
+        }
+        $id = $user->id;
+        $fees = Fee::where('user_id',$id)->get();
+        return response()->json([
+            'message'=>"User with ID {$id} fees returned successfully!",
+            'fees'=>$fees
+        ]);
+    }
+    public function payFees(Request $request){
+        $user = $request->user();
+        if($user->role !=="Student"){
+            return response()->json([
+                'message'=>"This data is meant only for students!",
+                'role'=> $user->role
+            ],500);
+        }
+        $fees = Fee::where('user_id', $user->id)->where('isPaid',false)->update(['isPaid'=>true]);
+        
+        return response()->json([
+            'message'=>"Fees paid for user with ID {$user->id}",
+            'fees'=>Fee::where('user_id',$user->id)
+        ],200);
+    }
 
     /**
      * Display the specified resource.

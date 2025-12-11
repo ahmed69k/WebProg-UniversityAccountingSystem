@@ -25,6 +25,7 @@ export class Navbar {
     })
   }
   isAdmin(){
+    const user = this.userService.getCurrentUser()
     return this.userService.user?.role === "Admin";
   }
   isStaff() {
