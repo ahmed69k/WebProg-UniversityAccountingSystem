@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Button } from "../../shared/button/button";
 import { Router } from '@angular/router';
 import { UserService, User } from '../../shared/userService/userService';
+import { ToastService } from '../../shared/ToastService';
 
 @Component({
   selector: 'app-login',
@@ -15,26 +16,21 @@ export class Login {
   password: string ='';
   role: string = '';
 
-  constructor(private router:Router, private userService: UserService){}
+  constructor(private router:Router, private userService: UserService, private toast:ToastService){}
+
   login(){
-    const currentUser = this.userService.findUser(this.email); 
-    if(this.email.trim().length===0 || this.password.trim().length===0){
-      alert("Please enter your credentials!")
-      return;
-    } 
-    if(!currentUser){
-      console.log('User not found!')
-      alert("User not found!")
-      return;
-    } 
-    
-    if(currentUser?.password !== this.password){
-      alert("Incorrect Password!")
-      return;
+    const payload = {
+      email:this.email,
+      password:this.password
     }
-    const token = btoa(`${this.email}:${new Date().getTime()}`)
-    this.userService.updateToken(this.email, token)
-    localStorage.setItem('token', token)
-    this.router.navigate(['profile'])
+    this.userService.login(payload).subscribe({
+      next: res=>{
+        this.toast.success(res.message)
+        this.router.navigate(['/profile'])
+      },
+      error: err =>{
+        this.toast.error(err.message);
+      }
+    })
   }
 }

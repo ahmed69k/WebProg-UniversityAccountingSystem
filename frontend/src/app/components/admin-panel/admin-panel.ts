@@ -17,7 +17,7 @@ export class AdminPanel {
   
   constructor(private router: Router, userService:UserService) {
     this.token = localStorage.getItem('token')
-    this.user = userService.users.find(u=>u.token === this.token)!
+    this.user = userService.users.find()!
   }
 
   usersBgImage = './admin-panel/assets/user-management.png';

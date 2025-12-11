@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { UserService } from '../userService/userService';
+import { ToastService } from '../ToastService';
 
 @Component({
   selector: 'app-navbar',
@@ -10,41 +11,34 @@ import { UserService } from '../userService/userService';
   styleUrl: './navbar.css',
 })
 export class Navbar {
-  constructor(private userService: UserService){
-  }
-  get token(){
-    return localStorage.getItem('token')
-  }
-  get user(){
-    return this.userService.users.find(u=>u.token === this.token)
+  constructor(private userService: UserService, private toast:ToastService, private router:Router){
   }
   logout(){
-    localStorage.removeItem('token');
+    return this.userService.logout().subscribe({
+      next: res=>{
+        this.toast.success(res.message)
+        this.router.navigate(['/login'])
+      },
+      error: err=>{
+        this.toast.error(err.message)
+      }
+    })
   }
-  isAdmin():boolean{
-    if(this.user?.role === 'Admin'){
-      return true;
-    }
-    return false;
+  isAdmin(){
+    return this.userService.user?.role === "Admin";
   }
-  isStaff(): boolean {
-    const role = this.user?.role?.toLowerCase();
-    const staffRoles = ['staff'];
-    return staffRoles.includes(role || '');
+  isStaff() {
+    return this.userService.user?.role === "Staff";
   } 
-isAccounting(): boolean {
-  return this.user?.role === 'Accounting Personnel';
+isAccounting() {
+  return this.userService.user?.role === "Accounting Personnel";
 }
 
-  isStudent(): boolean {
-    if(this.user?.role === 'Student'){
-      return true;
-    }
-    return false;
+  isStudent() {
+    return this.userService.user?.role === "Student";
   }
-  isLoggedIn(): boolean {
-    const userData = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    return !!(userData || token);
+  isLoggedIn():boolean{
+  const token = localStorage.getItem('token');
+  return !!token && token.trim() !== '';
   }
 }

@@ -6,3 +6,4 @@ use Laravel\Pail\ValueObjects\Origin\Console;
 Route::post('/register', [UserController::class, 'store']);
 Route::post('/login',[UserController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/profile',[UserController::class,'profile']);
+Route::post('/logout', [UserController::class,'logout'])->middleware('auth:sanctum');

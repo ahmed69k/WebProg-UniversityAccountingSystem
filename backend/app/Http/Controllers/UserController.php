@@ -30,7 +30,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'=>'required|string|max:255',
+            'name'=>'required|string|max:255|min:1',
             'email'=>'required|string|email|max:255|unique:users',
             'password'=>'required|string|min:6',
             'role'=>'required|in:Admin,Accounting Personnel,Student,Staff',
@@ -70,6 +70,15 @@ class UserController extends Controller
             'message'=>'User profile successfully!',
             'user'=>$user
         ],200);
+    }
+
+    public function logout(Request $request){
+        if($request->user()?->currentAccessToken()){
+            $request->user()->currentAccessToken()->delete();
+        }
+        return response()->json([
+            'message'=> 'Logged out successfully!'
+        ]);
     }
 
     /**

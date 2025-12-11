@@ -11,55 +11,15 @@ import { Button } from '../../shared/button/button';
   styleUrl: './profile.css',
 })
 export class Profile {
-  currentUser: User | undefined;
-  showSettings: boolean = false; // Add this property to control visibility
-
+  showSettings: boolean = false;
+  currentUser:User | null;
   constructor(private userService: UserService) {
-    const token = localStorage.getItem('token')
-    if(token){
-      this.currentUser = userService.users.find(u=> u.token ===token)
-    }
+    this.currentUser = userService.user;
   }
+  changeUsername(data:any){}
+  changeEmail(data:any){}
+  changePassword(data:any){}
+  changeProfilePicture(data:any){}
 
-  changePassword(newPassword: string) {
-    if (this.currentUser) {
-      this.currentUser.password = newPassword;
-      this.userService.updateUser(this.currentUser);
-      alert('Password changed successfully!');
-    }
-  }
 
-  changeEmail(newEmail: string) {
-    if (this.currentUser) {
-      const existingUser = this.userService.findUser(newEmail);
-      if (existingUser) {
-        alert('Email already in use!');
-        return;
-      }
-      this.currentUser.email = newEmail;
-      this.userService.updateUser(this.currentUser);
-      alert('Email changed successfully!');
-    }
-  }
-
-  changeUsername(newName: string) {
-    if (this.currentUser) {
-      this.currentUser.name = newName;
-      this.userService.updateUser(this.currentUser);
-      alert('Username changed successfully!');
-    }
-  }   
-
-  changeProfilePicture(event: any) {
-    if (this.currentUser) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        this.userService.addProfilePicture(this.currentUser!.email, base64String);
-        alert('Profile picture updated successfully!');
-      };
-      reader.readAsDataURL(file);
-    }
-  }
 }

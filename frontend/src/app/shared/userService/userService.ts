@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs';
+import { ToastService } from '../ToastService';
 
 export interface Fee{
   type: string,
@@ -16,75 +19,51 @@ export interface Salary{
 export interface User{
   name: string,
   email: string,
-  password: string,
   role: string,
-  token?: string,
-  id?:number;
-  fees: Fee[],
-  salary: Salary[],
+  id:number;
   profilePicture?: string,
+  create_at:string,
+  updated_at:string
 }
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  users: User[] = []
+  user: User | null = null
+  users:any;
+  apiUrl:string = 'http://localhost:8000/api'
 
-  constructor(){
-    const storedUsers = localStorage.getItem('users')
-    if(storedUsers){
-      this.users = JSON.parse(storedUsers)
-    }
-  }
-  addUser(user: User){
-    this.users.push(user)
-    localStorage.setItem('users', JSON.stringify(this.users))
-  }
-  findUser(email:string) :User | undefined{
-    return this.users.find(u => u.email === email)
-  }
-
-  updateToken(email:string, token: string){
-    const user = this.findUser(email)
-    if(user){
-      user.token = token;
-      localStorage.setItem('users',JSON.stringify(this.users))
-    }
-  }
-  getUsers(): User[]{
-    return this.users;
-  }
-  deleteUser(email: string){
-    const user = this.findUser(email)
-    const token = localStorage.getItem('token')
-    if(!user){
-      console.log("User not found!")
-      return;
-    }
-    if(user?.token === token){
-      localStorage.removeItem('token')
-    }
-    this.users = this.users.filter(u => u.email !== email)
-    localStorage.setItem('users',JSON.stringify(this.users))
-    console.log("User Deleted!")
-  }
-
-  updateUser(updatedUser: User){
-    const index = this.users.findIndex(u => u.email === updatedUser.email)
-
-    if(index !== -1){
-      this.users[index] = updatedUser;
-      localStorage.setItem('users', JSON.stringify(this.users))
-    }
-  }
-
-  addProfilePicture(email:string, pictureData:string){
-    const user = this.findUser(email)
-    if(user){
-      user.profilePicture = pictureData;
-      this.updateUser(user)
-    }
-  }
+  constructor(private http: HttpClient, private toast:ToastService){}
   
+
+  register(userData:any){
+    return this.http.post<{message:string, user:User}>(`${this.apiUrl}/register`,userData,{withCredentials:true})
+  }
+  login(userData:any){
+    return this.http.post<{message:string,user:User,token:string}>(`${this.apiUrl}/login`,userData,{withCredentials:true}).pipe(
+      tap({
+        next: res=>{
+          this.user = res.user
+          localStorage.setItem('token',res.token)
+          console.log(this.user)
+        }
+      })
+    )
+  }
+  logout(){
+    return this.http.post<{message:string}>(`${this.apiUrl}/logout`,{}, {
+      headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+        }).pipe(
+      tap({
+        next: res=>{
+          this.user = null;
+          localStorage.removeItem('token')
+        }
+      })
+    )
+  }
+  getCurrentUser(){
+    return this.http.get<{message:string, user:User}>(`${this.apiUrl}/profile`,{withCredentials:true})
+  }
   
 }

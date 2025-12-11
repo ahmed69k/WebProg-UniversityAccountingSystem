@@ -23,8 +23,6 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
   totalBudget: number = 0;
   allocatedBudget: number = 0;
   remainingBudget: number = 0;
-  user: User;
-  token: string | null;
 
   editingDepartment: Department | null = null;
   showForm: boolean = false;
@@ -37,9 +35,6 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
     private departmentService: DepartmentService,
     private userService: UserService
   ) {
-    this.departments = this.departmentService.getDepartments();
-    this.token = localStorage.getItem('token');
-    this.user = userService.users.find(u => u.token === this.token)!;
   }
 
   ngAfterViewInit(): void {
@@ -337,7 +332,6 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
     return this.departments.reduce((sum, dept) => sum + dept.remainingBudget, 0);
   }
 
-  isAdmin(): boolean {
-    return this.user?.role === 'Admin';
+  isAdmin() {
   }
 }

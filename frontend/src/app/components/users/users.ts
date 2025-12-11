@@ -10,19 +10,11 @@ import { Button } from '../../shared/button/button';
   styleUrl: './users.css',
 })
 export class Users {
-  users: User[];
-  constructor(private userService: UserService) {
-    this.users = userService.users;
-  }
+
+  users:any;
+  constructor(private userService: UserService) {}
   deleteUser(email:string){
-    const user = this.userService.findUser(email);
-    if(!user) return;
-    
-    const confirmed = window.confirm(`Are you sure you want to delete user ${user.name}`)
-    if(confirmed){
-    this.userService.deleteUser(email);
-    this.users = this.userService.users;
-    }
+
   }
 
 }

@@ -3,7 +3,7 @@
     <h2 class="title">Staff Payroll</h2>
   
     <!--Accounting Personnel: View ALL payrolls -->
-    <div *ngIf="currentUser?.role === 'Accounting Personnel'">
+    <div >
   
       <div *ngFor="let member of allStaff" class="staff-block">
   
@@ -58,9 +58,9 @@
     </div>
   
     <!-- Staff: View ONLY their own payroll -->
-    <div *ngIf="currentUser?.role === 'Staff'">
+    <div >
       <div class="staff-info">
-        <p><strong>Name:</strong> {{ currentUser?.name }}</p>
+        <p><strong>Name:</strong> hi</p>
       </div>
   
       <table class="payroll-table">
@@ -75,13 +75,13 @@
         </thead>
   
         <tbody>
-          <tr *ngFor="let p of currentUser?.salary">
+          <!-- <tr *ngFor="let p of currentUser?.salary">
             <td>{{ p.month }}</td>
             <td>{{ p.baseSalary }} EGP</td>
             <td>{{ p.bonus }} EGP</td>
             <td>{{ p.deductions }} EGP</td>
             <td class="net">{{ calculateNet(p) }} EGP</td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
       <div style="text-align: center; margin-top: 50px;">
@@ -90,8 +90,8 @@
     </div>
   
     <!-- Students: No access -->
-    <h3 *ngIf="currentUser?.role === 'Student'" class="denied">
+    <!-- <h3 *ngIf="currentUser?.role === 'Student'" class="denied">
       You do not have permission to view payroll information.
-    </h3>
+    </h3> -->
   
 </div>

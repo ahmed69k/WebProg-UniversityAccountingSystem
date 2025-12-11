@@ -13,10 +13,7 @@ import { Fee } from '../../shared/userService/userService';
 export class StudentFees {
   student: User | undefined;
   fees: Fee[] | undefined;
-  constructor(private us:UserService){
-    this.student = this.us.users.find(u=> u.token === localStorage.getItem('token'))
-    this.fees = this.student?.fees;
-  }
+  constructor(private us:UserService){}
    
 
 
