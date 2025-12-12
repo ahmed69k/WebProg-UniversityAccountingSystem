@@ -11,13 +11,8 @@ import { UserService, User } from '../../shared/userService/userService';
   styleUrl: './admin-panel.css',
 })
 export class AdminPanel {
-
-  user:User;
-  token:string | null;
   
-  constructor(private router: Router, userService:UserService) {
-    this.token = localStorage.getItem('token')
-    this.user = userService.users.find()!
+  constructor(private router: Router, private userService:UserService) {
   }
 
   usersBgImage = './admin-panel/assets/user-management.png';
@@ -41,11 +36,11 @@ studentFeesBgImage = './admin-panel/assets/student-fees.png';
     this.router.navigate(['/student-fees']);
   }
 
+  get currentUser(){
+    return this.userService.user
+  }
   isAdmin():boolean{
-      if(this.user?.role === 'Admin'){
-        return true;
-      }
-      return false;
+    return this.currentUser?.role === "Admin"
     }
 
 }

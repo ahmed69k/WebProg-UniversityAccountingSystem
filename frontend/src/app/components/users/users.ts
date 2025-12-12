@@ -1,20 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService, User } from '../../shared/userService/userService';
 import { CommonModule } from '@angular/common';
 import { Button } from '../../shared/button/button';
+import { ToastService } from '../../shared/ToastService';
 
 @Component({
   selector: 'app-users',
-  imports: [CommonModule, Button],
+  imports: [CommonModule],
   templateUrl: './users.html',
   styleUrl: './users.css',
 })
 export class Users {
 
-  users:any;
-  constructor(private userService: UserService) {}
-  deleteUser(email:string){
+  users:User[] | null = null;
+  loading: boolean = true;
+  constructor(private userService: UserService, private toast:ToastService) {}
+  deleteUser(id:number){
+    this.userService.deleteUser(id).subscribe({
+      next: res=>{
+        this.toast.success(res.message);
+        this.users = this.users?.filter(u => u.id !== id) ?? null;
 
+      },
+      error: err=>{
+        this.toast.error(err.message)
+      }
+    })
+  }
+
+  ngOnInit(){
+    this.allUsers()
+  }
+
+   allUsers(){
+    this.userService.getAllUsers().subscribe({
+      next: res=>{
+        this.users = res.users
+        this.loading = false;
+      },
+      error: err=>{
+        this.toast.error(err.error.message)
+      }
+    })
+    
   }
 
 }

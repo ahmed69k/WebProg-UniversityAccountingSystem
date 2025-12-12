@@ -92,6 +92,12 @@ export class UserService {
     return this.http.get<{message:string,credit_card:string}>(`${this.apiUrl}/user/credit`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
       .pipe( map(res=>res.credit_card))
   }
+  getAllUsers(){
+    return this.http.get<{message:string, users:User[]}>(`${this.apiUrl}/users`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}});
+  }
+  deleteUser(id:number){
+    return this.http.delete<{message:string, deleted_user:User}>(`${this.apiUrl}/users/${id}`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}});
+  }
 
 
   

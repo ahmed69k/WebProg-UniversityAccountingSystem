@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="container" *ngIf="!loading">
 <h1 class="container__title"> Users List</h1>
 <table border="1" class="container__table">
   <thead>
@@ -17,8 +17,12 @@
       <td>{{user.name}}</td>
       <td>{{user.email}}</td>
       <td>{{user.role}}</td>
-      <td><button class="delete-button" (click)="deleteUser(user.email)">Delete</button></td>
+      <td><button class="delete-button" (click)="deleteUser(user.id)">Delete</button></td>
     </tr>
   </tbody>
         </table>
     </div>
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+  </div>
+  

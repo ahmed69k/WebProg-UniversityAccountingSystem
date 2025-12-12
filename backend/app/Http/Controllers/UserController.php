@@ -117,6 +117,36 @@ class UserController extends Controller
             'credit_card'=>$credit
         ]);
     }
+    public function getAllUsers(Request $request){
+        $user = $request->user();
+        if($user->role !=="Admin"){
+            return response()->json([
+                'message'=>"Invalid role!",
+                'role'=>$user->role
+            ]);
+        }
+        $users = User::all();
+        return response()->json([
+            'message'=>"All users retrieved successfully!",
+            'users'=>$users
+        ]);
+    
+    }
+    public function deleteUser(Request $request, $id){
+        $user = $request->user();
+        if($user->role!=="Admin"){
+            return response()->json([
+                'message'=>"Invalid role!",
+                'role'=>$user->role
+            ]);            
+        }
+        $foundUser = User::findorFail($id);
+        $foundUser->delete();
+        return response()->json([
+            'message'=>"User deleted successfully!",
+            'deleted_user'=>$foundUser
+        ]);
+    }
 
     /**
      * Display the specified resource.
