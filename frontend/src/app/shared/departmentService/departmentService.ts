@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs';
 
 export interface Department{
   name: string;
@@ -13,17 +15,16 @@ export interface Department{
 })
 export class DepartmentService {
   departments: Department[] = []
+  apiUrl:string = 'http://localhost:8000/api'
 
-  constructor(){
-    const storedDepartments = localStorage.getItem('departments')
-    if(storedDepartments){
-      this.departments = JSON.parse(storedDepartments)
-    }
-  }
+  constructor(private http:HttpClient){}
 
   addDepartment(department: Department){
-    this.departments.push(department)
-    localStorage.setItem('departments', JSON.stringify(this.departments))
+    return this.http.post<{message:string, department:Department}>(`${this.apiUrl}/departments`,department,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}}).pipe(tap({
+      next: res=>{
+        this.departments.push(res.department);
+      }
+    }))
   }
 
   findDepartment(name: string): Department | undefined {
@@ -34,41 +35,22 @@ export class DepartmentService {
     return this.departments.find(d => d.id === id)
   }
 
-  getDepartments(): Department[]{
-    return this.departments;
+  getDepartments(){
+    return this.http.get<{message:string, departments:Department[]}>(`${this.apiUrl}/departments`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}}).pipe(
+      tap({
+        next: res=>{
+          this.departments = res.departments
+        }
+      })
+    )
   }
 
-  deleteDepartment(name: string){
-    const department = this.findDepartment(name)
-    if(!department){
-      console.log("Department not found!")
-      return;
-    }
-    this.departments = this.departments.filter(d => d.name !== name)
-    localStorage.setItem('departments',JSON.stringify(this.departments))
-    console.log("Department Deleted!")
+  deleteDepartment(id: number | undefined){
+    return this.http.delete<{message:string, deleted_department:Department}>(`${this.apiUrl}/departments/${id}`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
   }
 
   // NEW: Update department method
-  updateDepartment(updatedDepartment: Department): boolean {
-    const index = this.departments.findIndex(d => 
-      d.name === updatedDepartment.name || d.id === updatedDepartment.id
-    );
-    
-    if (index === -1) {
-      console.log("Department not found for update!");
-      return false;
-    }
-
-    // Update the department
-    this.departments[index] = {
-      ...this.departments[index],
-      ...updatedDepartment,
-      remainingBudget: updatedDepartment.totalBudget - updatedDepartment.allocatedBudget
-    };
-
-    localStorage.setItem('departments', JSON.stringify(this.departments));
-    console.log("Department updated successfully!");
-    return true;
+  updateDepartment(updatedDepartment: Department) {
+    return this.http.put<{message:string, updated_department:Department}>(`${this.apiUrl}/departments/update/${updatedDepartment.id}`,updatedDepartment,{headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
   }
 }

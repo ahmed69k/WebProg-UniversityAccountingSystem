@@ -1,10 +1,11 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewChecked, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Department, DepartmentService } from '../../shared/departmentService/departmentService';
 import { User, UserService } from '../../shared/userService/userService';
 
 import Chart from 'chart.js/auto';
+import { ToastService } from '../../shared/ToastService';
 
 @Component({
   selector: 'app-department-budget',
@@ -12,17 +13,19 @@ import Chart from 'chart.js/auto';
   templateUrl: './department-budget.html',
   styleUrl: './department-budget.css',
 })
-export class DepartmentBudget implements AfterViewInit, OnDestroy {
+export class DepartmentBudget implements AfterViewChecked, OnDestroy, OnInit {
 
   @ViewChild('budgetChart') budgetChartRef!: ElementRef;
   @ViewChild('distributionChart') distributionChartRef!: ElementRef;
   @ViewChild('utilizationChart') utilizationChartRef!: ElementRef;
 
-  departments: Department[] = [];
   name: string = '';
   totalBudget: number = 0;
   allocatedBudget: number = 0;
   remainingBudget: number = 0;
+
+  departments:Department[]= [];
+  loading:boolean = true;
 
   editingDepartment: Department | null = null;
   showForm: boolean = false;
@@ -30,18 +33,27 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
   private budgetChart: Chart | null = null;
   private distributionChart: Chart | null = null;
   private utilizationChart: Chart | null = null;
+  private chartsInitialized = false;
 
   constructor(
     private departmentService: DepartmentService,
-    private userService: UserService
+    private userService: UserService,
+    private toast:ToastService
   ) {
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.createCharts();
-    }, 0);
+  ngAfterViewChecked(): void {
+  if (
+    !this.chartsInitialized &&
+    !this.loading &&
+    this.budgetChartRef &&
+    this.distributionChartRef &&
+    this.utilizationChartRef
+  ) {
+    this.chartsInitialized = true;
+    this.updateCharts();
   }
+}
 
   ngOnDestroy(): void {
     if (this.budgetChart) {
@@ -221,17 +233,22 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
   // Update your existing methods to refresh charts
   addDepartment(): void {
     const currentDepartment: Department = {
-      id: Math.floor(Math.random() * (9999 - 1 + 1)) + 1,
       name: this.name,
       totalBudget: this.totalBudget,
       allocatedBudget: this.allocatedBudget,
       remainingBudget: this.totalBudget - this.allocatedBudget
     };
-    
-    this.departmentService.addDepartment(currentDepartment);
-    this.departments = this.departmentService.getDepartments();
-    this.updateCharts();
-    this.resetForm();
+    this.departmentService.addDepartment(currentDepartment).subscribe({
+      next: res=>{
+        this.toast.success(res.message)
+        console.log(this.departments)
+        this.showForm = false;
+        this.allDepartments()
+      },
+      error: err=>{
+        this.toast.error(err.error.message)
+      }
+    })
   }
 
   updateDepartment(): void {
@@ -245,46 +262,37 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
       remainingBudget: this.totalBudget - this.allocatedBudget
     };
 
-    const success = this.departmentService.updateDepartment(updatedDepartment);
-    
-    if (success) {
-      this.departments = this.departmentService.getDepartments();
-      this.updateCharts();
-      this.resetForm();
-    } else {
-      alert('Failed to update department!');
-    }
+    this.departmentService.updateDepartment(updatedDepartment).subscribe({
+      next: res=>{
+        this.departments = this.departments.map(dep=>dep.id === updatedDepartment.id ? res.updated_department : dep)
+        this.toast.success(res.message);
+        this.updateCharts()
+        this.resetForm();
+      },
+      error: err=>{
+        this.toast.error(err.error.message);
+      }
+    });
   }
 
-  deleteDepartment(name: string): void {
+  deleteDepartment(id: number|undefined): void {
     const confirmed = window.confirm(`Are you sure you want to delete department: ${name}?`);
     
     if (confirmed) {
-      this.departmentService.deleteDepartment(name);
-      this.departments = this.departmentService.getDepartments();
-      this.updateCharts();
+      this.departmentService.deleteDepartment(id).subscribe({
+        next: res=>{
+          this.toast.success(res.message);
+          this.departments = this.departments.filter(d=>d.id!==res.deleted_department.id)
+          this.updateCharts()
+        },
+        error: err=>{
+          this.toast.error(err.error.message);
+        }
+      })
+
     }
   }
 
-  quickUpdateBudget(department: Department, field: 'totalBudget' | 'allocatedBudget', value: number): void {
-    let remainingBudget: number;
-    
-    if (field === 'totalBudget') {
-      remainingBudget = value - department.allocatedBudget;
-    } else {
-      remainingBudget = department.totalBudget - value;
-    }
-
-    const updatedDepartment = {
-      ...department,
-      [field]: value,
-      remainingBudget: remainingBudget
-    };
-
-    this.departmentService.updateDepartment(updatedDepartment);
-    this.departments = this.departmentService.getDepartments();
-    this.updateCharts();
-  }
 
   onSubmit(): void {
     if (this.editingDepartment) {
@@ -333,5 +341,25 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
   }
 
   isAdmin() {
+    return this.currentUser?.role ==="Admin"
+  }
+
+  get currentUser(): User | null{
+    return this.userService.user;
+  }
+  allDepartments(){
+    this.departmentService.getDepartments().subscribe({
+      next: res=>{
+        this.departments = res.departments
+        this.loading = false
+        this.chartsInitialized = false;
+      },
+      error: err=>{
+        this.toast.error(err.error.message);
+      }
+    })
+  }
+  ngOnInit(): void {
+    this.allDepartments();
   }
 }

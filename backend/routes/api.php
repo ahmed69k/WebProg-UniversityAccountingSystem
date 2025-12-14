@@ -1,6 +1,8 @@
 <?php
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FeeController;
 use App\Http\Controllers\UserController;
+use App\Models\Department;
 use Illuminate\Support\Facades\Route;
 use Laravel\Pail\ValueObjects\Origin\Console;
 
@@ -19,3 +21,8 @@ Route::get('/fees',[FeeController::class,'getAllFees'])->middleware('auth:sanctu
 Route::post('/fees/pay',[FeeController::class, 'payFees'])->middleware("auth:sanctum");
 Route::delete('/fees/{id}',[FeeController::class, 'delete'])->middleware('auth:sanctum');
 Route::get('/fees/{id}',[FeeController::class,'getFeeById'])->middleware('auth:sanctum');
+
+Route::post('/departments', [DepartmentController::class,'store'])->middleware('auth:sanctum');
+Route::get('/departments',[DepartmentController::class, 'getAll'])->middleware('auth:sanctum');
+Route::delete('/departments/{id}',[DepartmentController::class, 'delete'])->middleware('auth:sanctum');
+Route::put('/departments/update/{id}',[DepartmentController::class,'update'])->middleware("auth:sanctum");

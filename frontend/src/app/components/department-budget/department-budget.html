@@ -1,4 +1,8 @@
-<div class="department-budget">   
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+  </div>
+
+<div class="department-budget" *ngIf="!loading">   
   <h2>Department Budget Management</h2>
   <div class="header" *ngIf="isAdmin()">
     <button class="btn-primary" (click)="showForm = !showForm; editingDepartment = null">
@@ -148,7 +152,7 @@
             ${{ dept.remainingBudget | number }}
           </td>
           <td class="actions" *ngIf="isAdmin()">
-            <button class="btn-delete" (click)="deleteDepartment(dept.name)">Delete</button>
+            <button class="btn-delete" (click)="deleteDepartment(dept.id)">Delete</button>
           </td>
           <td class="actions">
             <button class="btn-update" (click)="startEditDepartment(dept)">Edit</button>
