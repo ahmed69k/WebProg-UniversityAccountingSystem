@@ -15,6 +15,7 @@
   }
 
   .staff-info {
+    margin-top: 20px;
     margin-bottom: 20px;
     padding: 15px;
     background: #f3f4f6;
@@ -80,4 +81,85 @@
     background: #5563d5;
     transform: translateY(-2px);
   }
+   .loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 200px; /* Adjust as needed */
+}
+
+.spinner {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #000000; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.add-payroll-form {
+  background-color: f8f9fc; /* soft light background */
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.add-payroll-form h3 {
+  margin-bottom: 15px;
+  color: black;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-row label {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.form-row input,
+.form-row select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 5px rgba(197, 157, 95, 0.5);
+}
+
+.form-actions {
+  text-align: right;
+}
+.salary-input {
+  width: 80px;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.update-btn {
+  --btn-width: 80px;
+  padding: 4px 8px;
+}
+
+
   

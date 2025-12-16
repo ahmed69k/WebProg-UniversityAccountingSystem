@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FeeController;
+use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\UserController;
 use App\Models\Department;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,8 @@ Route::post('/departments', [DepartmentController::class,'store'])->middleware('
 Route::get('/departments',[DepartmentController::class, 'getAll'])->middleware('auth:sanctum');
 Route::delete('/departments/{id}',[DepartmentController::class, 'delete'])->middleware('auth:sanctum');
 Route::put('/departments/update/{id}',[DepartmentController::class,'update'])->middleware("auth:sanctum");
+
+Route::post('/salary/to-all-staff',[SalaryController::class, 'addSalaryToAllStaff'])->middleware('auth:sanctum');
+Route::get('/salary',[SalaryController::class,'getSalaryForEmployee'])->middleware('auth:sanctum');
+Route::get('/salary/all',[SalaryController::class,'getAll'])->middleware('auth:sanctum');
+Route::put('/salary/bonus-or-deductions/{id}',[SalaryController::class, 'addBonusOrDeductions'])->middleware('auth:sanctum');
