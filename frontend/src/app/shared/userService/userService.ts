@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, tap } from 'rxjs';
 import { ToastService } from '../ToastService';
+import LogRocket from 'logrocket';
 
 export interface Fee{
   type: string,
@@ -44,6 +45,11 @@ export class UserService {
       tap({
         next: res=>{
           this.user = res.user
+          LogRocket.identify((this.user!.id).toString(), {
+          name: this.user!.name,
+          email: this.user!.email,
+          role: this.user!.role,
+        });
           localStorage.setItem('token',res.token)
           console.log(this.user)
         }
@@ -93,7 +99,15 @@ export class UserService {
       .pipe( map(res=>res.credit_card))
   }
   getAllUsers(){
-    return this.http.get<{message:string, users:User[]}>(`${this.apiUrl}/users`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}});
+    const start = performance.now()
+    return this.http.get<{message:string, users:User[]}>(`${this.apiUrl}/users`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}}).pipe(
+      tap({
+        next: res=>{
+          const loadTime = performance.now() - start
+          LogRocket.track('Users Table Load Time', {page: "Users", loadTime: loadTime})
+        }
+      })
+    );
   }
   deleteUser(id:number){
     return this.http.delete<{message:string, deleted_user:User}>(`${this.apiUrl}/users/${id}`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}});
