@@ -1,0 +1,171 @@
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+  </div>
+
+<div class="department-budget" *ngIf="!loading">   
+  <h2>Department Budget Management</h2>
+  <div class="header" *ngIf="isAdmin()">
+    <button class="btn-primary" (click)="showForm = !showForm; editingDepartment = null">
+      + Add Department
+    </button>
+  </div>
+
+  <!-- Add/Edit Department Form -->
+  <div *ngIf="showForm" class="form-section">
+    <h3>{{ editingDepartment ? 'Edit Department' : 'Add New Department' }}</h3>
+    <form (ngSubmit)="onSubmit()" class="department-form">
+      <div class="form-group">
+        <label for="name">Department Name:</label>
+        <input 
+          type="text" 
+          id="name"
+          [(ngModel)]="name" 
+          name="name" 
+          required
+          [readonly]="!!editingDepartment"
+          placeholder="Enter department name">
+      </div>
+
+      <div class="form-group">
+        <label for="totalBudget">Total Budget ($):</label>
+        <input 
+          type="number" 
+          id="totalBudget"
+          [(ngModel)]="totalBudget" 
+          name="totalBudget" 
+          min="0"
+          (input)="calculateRemainingBudget()"
+          required
+          placeholder="Enter total budget">
+      </div>
+
+      <div class="form-group">
+        <label for="allocatedBudget">Allocated Budget ($):</label>
+        <input 
+          type="number" 
+          id="allocatedBudget"
+          [(ngModel)]="allocatedBudget" 
+          name="allocatedBudget" 
+          min="0"
+          [max]="totalBudget"
+          (input)="calculateRemainingBudget()"
+          required
+          placeholder="Enter allocated budget">
+      </div>
+
+      <div class="form-group">
+        <label for="remainingBudget">Remaining Budget ($):</label>
+        <input 
+          type="number" 
+          id="remainingBudget"
+          [value]="remainingBudget"
+          readonly
+          class="readonly-field"
+          [class.negative]="remainingBudget < 0">
+        <small class="budget-warning" *ngIf="remainingBudget < 0">
+          ⚠️ Allocated budget exceeds total budget!
+        </small>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="remainingBudget < 0">
+          {{ editingDepartment ? 'Update' : 'Add' }} Department
+        </button>
+        <button type="button" class="btn-secondary" (click)="cancelEdit()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card">
+      <h3>Total Budget</h3>
+      <p>${{ getTotalBudget() | number }}</p>
+    </div>
+    <div class="card">
+      <h3>Total Allocated</h3>
+      <p>${{ getTotalAllocated() | number }}</p>
+    </div>
+    <div class="card">
+      <h3>Total Remaining</h3>
+      <p>${{ getTotalRemaining() | number }}</p>
+    </div>
+    <div class="card">
+      <h3>Total Departments</h3>
+      <p>{{ departments.length }}</p>
+    </div>
+  </div>
+
+  <!-- Summary Charts Section -->
+<div class="charts-section">
+  <h3>Budget Analytics</h3>
+  
+  <div class="charts-grid">
+    <!-- Budget Overview Chart -->
+    <div class="chart-container">
+      <div class="chart-card">
+        <h4>Department Budget Overview</h4>
+        <canvas #budgetChart></canvas>
+      </div>
+    </div>
+
+    <!-- Budget Distribution Chart -->
+    <div class="chart-container">
+      <div class="chart-card">
+        <h4>Budget Distribution</h4>
+        <canvas #distributionChart></canvas>
+      </div>
+    </div>
+
+    <!-- Utilization Chart -->
+    <div class="chart-container">
+      <div class="chart-card">
+        <h4>Budget Utilization</h4>
+        <canvas #utilizationChart></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Departments Table -->
+  <div class="departments-table" *ngIf="departments.length > 0">
+    <h3>Department List</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Department Name</th>
+          <th>Total Budget</th>
+          <th>Allocated Budget</th>
+          <th>Remaining Budget</th>
+          <th *ngIf="isAdmin()">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dept of departments">
+          <td class="department-name">{{ dept.name }}</td>
+          <td>${{ dept.totalBudget | number }}</td>
+          <td>${{ dept.allocatedBudget | number }}</td>
+          <td [class.negative]="dept.remainingBudget < 0" 
+              [class.positive]="dept.remainingBudget >= 0">
+            ${{ dept.remainingBudget | number }}
+          </td>
+          <td class="actions" *ngIf="isAdmin()">
+            <button class="btn-delete" (click)="deleteDepartment(dept.id)">Delete</button>
+          </td>
+          <td class="actions">
+            <button class="btn-update" (click)="startEditDepartment(dept)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="departments.length === 0" class="empty-state">
+    <div class="empty-icon">📊</div>
+    <h3>No Departments Found</h3>
+    <p>Start by adding your first department using the "Add Department" button above.</p>
+  </div>
+</div>

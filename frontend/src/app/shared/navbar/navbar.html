@@ -1,0 +1,69 @@
+<div class="body">
+    <nav class="navbar">
+    <a routerLink="" class="navbar__title">University Accounting System</a>
+
+    <ul class="navbar__list" *ngIf="isAdmin()">
+        <li class= "navbar__list__item">
+            <a routerLink="admin-panel">Admin Panel</a> 
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="profile">Profile</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="login" (click)="logout()">Logout</a>
+        </li>
+    </ul>
+
+    <ul class="navbar__list"  *ngIf="isAccounting()">
+        <li class="navbar__list__item">
+            <a routerLink="staff-payroll">Payroll</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="department-budget" >Department Budget</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="profile">Profile</a>
+        </li>
+        <li class="navbar__list__item">
+            <a (click)="logout()">Logout</a>
+        </li>
+        
+    </ul>
+        <ul class="navbar__list"  *ngIf="isStaff()">
+        <li class="navbar__list__item">
+            <a routerLink="staff-payroll">Payroll</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="profile">Profile</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="login" (click)="logout()">Logout</a>
+        </li>
+        
+    </ul>
+
+    <ul class="navbar__list" *ngIf="isStudent()">
+        <li class="navbar__list__item">
+            <a routerLink="student-fees">Student fees</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="profile">Profile</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="login" (click)="logout()">Logout</a>
+        </li>
+    </ul>
+
+     <ul class="navbar__list" *ngIf='!isLoggedIn()'>
+        <li class="navbar__list__item">
+            <a routerLink="login" >Login</a>
+        </li>
+        <li class="navbar__list__item">
+            <a routerLink="register">Sign Up</a>
+        </li>
+    </ul>
+
+</nav>
+
+
+</div>
