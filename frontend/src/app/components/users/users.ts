@@ -32,17 +32,17 @@ export class Users {
     this.allUsers()
   }
 
-  allUsers() {
-  // Use 'getAllUsers' (as defined in your service)
-  this.userService.getAllUsers().subscribe({
-    next: (res: any) => {
-      // Your service returns { message: string, users: User[] }
-      this.users = res.users; 
-    },
-    error: (err) => {
-      console.error('Error fetching users', err);
-    }
-  });
-}
+   allUsers(){
+    this.userService.getAllUsers().subscribe({
+      next: res=>{
+        this.users = res.users
+        this.loading = false;
+      },
+      error: err=>{
+        this.toast.error(err.error.message)
+      }
+    })
+    
+  }
 
 }
