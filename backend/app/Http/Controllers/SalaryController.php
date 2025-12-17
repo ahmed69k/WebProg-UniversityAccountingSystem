@@ -10,7 +10,7 @@ class SalaryController extends Controller
 {
    public function addSalaryToAllStaff(Request $request){
     $user = $request->user();
-    if($user->role!=="Admin"){
+    if($user->role!=="Accounting Personnel"){
         return response()->json([
             'message' => "Unauthorized!",
             'role' => $user->role
@@ -41,7 +41,7 @@ class SalaryController extends Controller
     public function addBonusOrDeductions(Request $request, $id){
         $user = $request->user();
 
-        if ($user->role !== "Admin") {
+        if ($user->role !== "Accounting Personnel") {
             return response()->json([
                 'message' => "Unauthorized!",
                 'role' => $user->role
@@ -99,7 +99,7 @@ class SalaryController extends Controller
     }
     public function getAll(Request $request){
         $user = $request->user();
-        if($user->role!=="Admin"){
+        if($user->role!=="Accounting Personnel"){
             return response()->json([
                 'message' => "Unauthorized!",
                 'role' => $user->role

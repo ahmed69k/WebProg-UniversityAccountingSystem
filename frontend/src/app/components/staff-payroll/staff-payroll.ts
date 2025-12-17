@@ -70,7 +70,7 @@ export class StaffPayroll implements OnInit {
   /** -------------------- Admin & Staff Helpers -------------------- **/
 
   get isAdmin() {
-    return this.userService.user?.role === "Admin";
+    return this.userService.user?.role === "Accounting Personnel";
   }
 
   get isStaff() {
@@ -105,7 +105,7 @@ export class StaffPayroll implements OnInit {
   fetchSalaries() {
     this.loading = true;
 
-    if (this.user?.role === "Admin") {
+    if (this.user?.role === "Accounting Personnel") {
       this.salaryService.getAllSalaries().subscribe({
         next: res => {
           this.salaries = res.salaries || [];

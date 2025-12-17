@@ -1,4 +1,4 @@
-<div class="fees-container" *ngIf="!loading">
+<div class="fees-container" *ngIf="!loading && currentUser?.role==='Student'">
     <h2 class="title">Student Fees</h2>
   
     <div class="student-info">
@@ -34,4 +34,45 @@
   <div *ngIf="loading" class="loading-container">
     <div class="spinner"></div>
   </div>
+
+  <div class="fees-container" *ngIf="!loading && currentUser?.role==='Accounting Personnel'">
+    <h2 class="title">Student Fees</h2>
+  
+    <div class="student-info">
+      <p><strong>Name:</strong> {{ currentUser?.name }}</p>
+      <p><strong>ID:</strong> {{ currentUser?.id }}</p>
+    </div>
+  
+    <table class="fees-table">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Fee Type</th>
+          <th>Amount</th>
+          <th>Paid?</th>
+        </tr>
+      </thead>
+  
+      <tbody>
+        <tr *ngFor="let fee of fees">
+          <td> {{fee.user_id}}</td>
+          <td>{{ fee.type }}</td>
+          <td>{{ fee.amount }} EGP</td>
+          <td [class.paid]="fee.isPaid" [class.unpaid]="!fee.isPaid">
+            {{ fee.isPaid }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="isToggled">
+      <form (ngSubmit)="addFee()">
+        <input type="text" [(ngModel)]="user_id" name="user_id" placeholder="User ID">
+        <input type="text" [(ngModel)]="type" name="type" placeholder="Type">
+        <input type="number" [(ngModel)]="amount" name="amount" placeholder="Amount">
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <button (click)="toggleWindow()">Add Fee</button>
+    </div>
+
   

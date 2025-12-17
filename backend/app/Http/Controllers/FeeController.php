@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fee;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FeeController extends Controller
@@ -41,6 +42,13 @@ class FeeController extends Controller
             'isPaid'=>'nullable|boolean',
             'user_id'=>'required|exists:users,id'
         ]);
+        $student = User::find($validated['user_id']);
+        if($student->role!=="Student"){
+            return response()->json([
+                'message'=>"User must be a student!",
+                'user'=>$student
+            ],500);
+        }
         $fee = Fee::create($validated);
         return response()->json([
             'message'=>'Fee created succesfully for user' . $validated['user_id'],
