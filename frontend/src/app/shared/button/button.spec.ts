@@ -7,6 +7,7 @@ describe('Button', () => {
   let fixture: ComponentFixture<Button>;
 
   beforeEach(async () => {
+    TestBed.resetTestingModule();
     await TestBed.configureTestingModule({
       imports: [Button]
     })

@@ -1,113 +1,64 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { Login } from './login'; 
+import { UserService } from '../../shared/userService/userService';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { Login } from './login';
-import { UserService, User } from '../../shared/userService/userService';
-import { Button } from '../../shared/button/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { of, throwError } from 'rxjs';
+import { ToastService } from '../../shared/ToastService';
 
-// Mock UserService for isolated testing
-class MockUserService {
-  users: User[] = [
-    { id: 1, name: 'Test User', email: 'test@example.com', password: 'password123', role: 'Student', fees: [], salary: [], token: '' },
-    { id: 2, name: 'Admin User', email: 'admin@example.com', password: 'adminpassword', role: 'Admin', fees: [], salary: [], token: '' }
-  ];
-
-  findUser(email: string): User | undefined {
-    return this.users.find(u => u.email === email);
-  }
-
-  updateToken(email: string, token: string): void {
-    const user = this.findUser(email);
-    if (user) {
-      user.token = token;
-    }
-  }
-}
-
-class MockRouter {
-  navigate(path: string[]): void {}
-}
-
-describe('Login', () => {
+describe('LoginComponent', () => {
   let component: Login;
   let fixture: ComponentFixture<Login>;
-  let userService: UserService;
-  let router: Router;
-  let localStorageSpy: jasmine.SpyObj<Storage>;
+  let userServiceSpy: jasmine.SpyObj<UserService>;
+  let routerSpy: jasmine.SpyObj<Router>;
+  let toastServiceSpy: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
-    localStorageSpy = jasmine.createSpyObj('localStorage', ['setItem', 'getItem']);
+    TestBed.resetTestingModule();
+    userServiceSpy = jasmine.createSpyObj('UserService', ['login', 'saveUser']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    toastServiceSpy = jasmine.createSpyObj('ToastService', ['success', 'error']);
 
     await TestBed.configureTestingModule({
-      imports: [FormsModule, Button, Login],
+      imports: [Login, ReactiveFormsModule],
       providers: [
-        { provide: UserService, useClass: MockUserService },
-        { provide: Router, useClass: MockRouter }
+        { provide: UserService, useValue: userServiceSpy },
+        { provide: Router, useValue: routerSpy },
+        { provide: ToastService, useValue: toastServiceSpy }
       ]
     }).compileComponents();
 
-    // Mock global localStorage
-    spyOn(localStorage, 'setItem').and.callFake(localStorageSpy.setItem);
-    spyOn(localStorage, 'getItem').and.callFake(localStorageSpy.getItem);
-
     fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
-    userService = TestBed.inject(UserService);
-    router = TestBed.inject(Router);
-
-    // Mock window.alert and console.log
-    spyOn(window, 'alert');
-    spyOn(console, 'log');
-    spyOn(userService, 'updateToken').and.callThrough();
-    spyOn(router, 'navigate');
+    fixture.detectChanges(); // Initializes the form
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should navigate to dashboard on success', fakeAsync(() => {
+    const form = (component as any).loginForm;
+    expect(form).toBeDefined();
 
-  describe('login', () => {
-    it('should log "User not found!" and not proceed if user does not exist', () => {
-      component.email = 'nonexistent@example.com';
-      component.password = 'anypassword';
+    const mockResponse = { 
+      message: 'Success', 
+      token: '123', 
+      user: { id: 1, name: 'Admin', email: 'a@t.com', role: 'Admin', created_at: '', updated_at: '' } 
+    };
+    userServiceSpy.login.and.returnValue(of(mockResponse));
 
-      component.login();
+    form.patchValue({ email: 'admin@test.com', password: '123' });
+    (component as any).onSubmit();
+    tick();
 
-      expect(console.log).toHaveBeenCalledWith('User not found!');
-      expect(window.alert).not.toHaveBeenCalled();
-      expect(userService.updateToken).not.toHaveBeenCalled();
-      expect(localStorage.setItem).not.toHaveBeenCalled();
-      expect(router.navigate).not.toHaveBeenCalled();
-    });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard']);
+  }));
 
-    it('should alert "Incorrect Password!" and not proceed if password is wrong', () => {
-      component.email = 'test@example.com';
-      component.password = 'wrongpassword';
+  it('should show error toast on login failure', fakeAsync(() => {
+    userServiceSpy.login.and.returnValue(throwError(() => ({ error: { message: 'Invalid' } })));
+    const form = (component as any).loginForm;
+    
+    form.patchValue({ email: 'wrong@t.com', password: '000' });
+    (component as any).onSubmit();
+    tick();
 
-      component.login();
-
-      expect(console.log).not.toHaveBeenCalled(); // Should not log "User not found!"
-      expect(window.alert).toHaveBeenCalledWith('Incorrect Password!');
-      expect(userService.updateToken).not.toHaveBeenCalled();
-      expect(localStorage.setItem).not.toHaveBeenCalled();
-      expect(router.navigate).not.toHaveBeenCalled();
-    });
-
-    it('should successfully log in, update token, set localStorage, and navigate to profile', () => {
-      component.email = 'test@example.com';
-      component.password = 'password123';
-
-      component.login();
-
-      expect(console.log).not.toHaveBeenCalled();
-      expect(window.alert).not.toHaveBeenCalled();
-      expect(userService.updateToken).toHaveBeenCalledWith(component.email, jasmine.any(String));
-      expect(localStorage.setItem).toHaveBeenCalledWith('token', jasmine.any(String));
-      expect(router.navigate).toHaveBeenCalledWith(['profile']);
-
-      // Verify the token format (base64 encoded email:timestamp)
-      const storedToken = localStorageSpy.setItem.calls.mostRecent().args[1];
-      expect(atob(storedToken)).toMatch(/^test@example\.com:\d+$/);
-    });
-  });
+    expect(toastServiceSpy.error).toHaveBeenCalledWith('Invalid');
+  }));
 });

@@ -9,9 +9,10 @@ import { Button } from '../../shared/button/button';
 @Component({
   selector: 'app-chat-ai',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, Button],
+  // REMOVE 'Button' from this list below
+  imports: [CommonModule, FormsModule], 
   templateUrl: './chat-ai.html',
-  styleUrls: ['./chat-ai.css']
+  styleUrl: './chat-ai.css'
 })
 export class ChatAiComponent {
   isToggled:boolean = false

@@ -12,9 +12,9 @@ class SalaryController extends Controller
     $user = $request->user();
     if($user->role!=="Admin"){
         return response()->json([
-            'message'=>"Unauthorized!",
-            'role'=>$user->role
-        ]);
+            'message' => "Unauthorized!",
+            'role' => $user->role
+        ], 403); 
     }
     $staffUsers = User::where('role','Staff')->get();
     $validated = $request->validate([

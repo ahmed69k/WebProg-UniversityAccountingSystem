@@ -4,12 +4,15 @@ import { FormsModule } from "@angular/forms";
 import { CommonModule } from '@angular/common';
 import { Button } from '../../shared/button/button';
 import { ToastService } from '../../shared/ToastService';
+import {  OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-profile',
-  imports: [FormsModule, CommonModule, Button],
+  standalone: true,
+  // REMOVE 'Button' from this list below
+  imports: [CommonModule], 
   templateUrl: './profile.html',
-  styleUrl: './profile.css',
+  styleUrl: './profile.css'
 })
 export class Profile {
   showSettings: boolean = false;
