@@ -1,66 +1,95 @@
-<div class="payroll-container">
+ <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+  </div>
+<div *ngIf="!loading">
+  <div class="payroll-container">
 
     <h2 class="title">Staff Payroll</h2>
+    <app-button [text]="'Add Payroll'" (click)="toggleWindow()"></app-button>
+    <div class="add-payroll-form" *ngIf="isVisible">
+  <h3>Add Payroll</h3>
+  <form (ngSubmit)="addSalary()">
+    <div class="form-row">
+      <label for="month">Month</label>
+      <select id="month" name="month" [(ngModel)]="month" required>
+        <option value="" disabled selected>Select a month...</option>
+        <option *ngFor="let m of months" [value]="m">{{ m }}</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="salary">Base Salary (EGP)</label>
+      <input id="salary" type="number" [(ngModel)]="salary" name="salary" placeholder="Enter salary" required />
+    </div>
+
+    <div class="form-actions">
+      <app-button type="submit" [text]="'Submit'"></app-button>
+    </div>
+  </form>
+  <br>
+</div>
+
   
     <!--Accounting Personnel: View ALL payrolls -->
-    <div >
-  
-      <div *ngFor="let member of allStaff" class="staff-block">
-  
-        <div class="staff-info" style="flex-direction: row; display: flex; gap: 30px;">
-          <p><strong>Name:</strong> {{ member.name }}</p>
-          <p><strong>ID:</strong> {{ member.id }}</p>
-          <p><strong>Email:</strong> {{ member.email }}</p>
-        </div>
-  
-        <table class="payroll-table">
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Base Salary</th>
-              <th>Bonus</th>
-              <th>Deductions</th>
-              <th>Net Salary</th>
-            </tr>
-          </thead>
-  
-          <tbody>
-            <tr *ngFor="let p of member.salary">
-              <td>{{ p.month }}</td>
-              <td>{{ p.baseSalary }} EGP</td>
-              <td>{{ p.bonus }} EGP</td>
-              <td>{{ p.deductions }} EGP</td>
-              <td class="net">{{ calculateNet(p) }} EGP</td>
-            </tr>
-          </tbody>
-        </table>
+      <div *ngIf="isAdmin">
+        <div *ngFor="let member of salariesByUser" class="staff-block">
+          <div class="staff-info" style="flex-direction: row; display: flex; gap: 30px;">
+            <p><strong>Name:</strong> {{ member.user.name }}</p>
+            <p><strong>ID:</strong> {{ member.user.id }}</p>
+            <p><strong>Email:</strong> {{ member.user.email }}</p>
+          </div>
 
+          <table class="payroll-table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Base Salary</th>
+                <th>Bonus</th>
+                <th>Deductions</th>
+                <th>Net Salary</th>
+                <th>Added At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let p of member.salaries; trackBy:trackBySalary">
+                <td>{{ p.month }}</td>
+                <td>{{ p.base_salary }} EGP</td>
+                <td>
+                  <input type="number" [(ngModel)]="p.bonus" placeholder="Bonus" class="salary-input" />
+                </td>
+                <td>
+                  <input type="number" [(ngModel)]="p.deductions" placeholder="Deductions" class="salary-input" />
+                </td>
+                <td class="net">{{ calculateNet(p) }} EGP</td>
+                <td>{{ p.created_at }}</td>
+                <td>
+                  <app-button
+                    (click)="addBonusOrDeductions(p.user?.id!, p)"
+                    [text]="'Update'"
+                    class="update-btn"
+                  ></app-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-            <form (ngSubmit)="addSalary()">
-            <select name="month" [(ngModel)]="month">
-              <option value=""disabled selected> Select a month...</option>
-              <option value="January">January</option>
-              <option value="February">February</option>
-              <option value="March">March</option>
-              <option value="April">April</option>
-              <option value="May">May</option>
-              <option value="June">June</option>
-              <option value="July">July</option>
-              <option value="August">August</option>
-              <option value="September">September</option>
-              <option value="October">October</option>
-              <option value="November">November</option>
-              <option value="December">December</option>
-            </select>
-            <input type="number" placeholder="Salary in EGP" [(ngModel)] = "salary" name="salary">
-            <app-button type="submit" [text]="'Add Payroll'"></app-button>
-          </form>
+
+
+
     </div>
   
-    <!-- Staff: View ONLY their own payroll -->
-    <div >
+   <div *ngIf="isStaff">
+     <!-- Staff: View ONLY their own payroll -->
+    <div>
       <div class="staff-info">
-        <p><strong>Name:</strong> hi</p>
+          <p><strong>Name:</strong> {{ this.user?.name }}</p>
+          <p><strong>ID:</strong> {{ this.user?.id }}</p>
+          <p><strong>Email:</strong> {{ this.user?.email }}</p>
+        
+
       </div>
   
       <table class="payroll-table">
@@ -71,17 +100,19 @@
             <th>Bonus</th>
             <th>Deductions</th>
             <th>Net Salary</th>
+            <th>Added At</th>
           </tr>
         </thead>
   
         <tbody>
-          <!-- <tr *ngFor="let p of currentUser?.salary">
+          <tr *ngFor="let p of salaries">
             <td>{{ p.month }}</td>
-            <td>{{ p.baseSalary }} EGP</td>
+            <td>{{ p.base_salary }} EGP</td>
             <td>{{ p.bonus }} EGP</td>
             <td>{{ p.deductions }} EGP</td>
             <td class="net">{{ calculateNet(p) }} EGP</td>
-          </tr> -->
+            <td>{{p.created_at}}</td>
+          </tr>
         </tbody>
       </table>
       <div style="text-align: center; margin-top: 50px;">
@@ -89,9 +120,6 @@
       </div>
     </div>
   
-    <!-- Students: No access -->
-    <!-- <h3 *ngIf="currentUser?.role === 'Student'" class="denied">
-      You do not have permission to view payroll information.
-    </h3> -->
-  
+   </div>
 </div>
+

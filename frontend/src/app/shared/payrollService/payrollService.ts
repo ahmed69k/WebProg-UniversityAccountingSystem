@@ -1,16 +1,23 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs';
+import LogRocket from 'logrocket';
+import { User } from '../userService/userService';
 
 export interface Salary {
-    employeeId: string;
-    employeeName: string;
-    date: Date;
-    basicPay: number;
-    bonus?: number;
-    deductions?: number;
-    paymentMethod: 'bank transfer' | 'check' ;
-    transactionId?: string;
-    status: 'processed' | 'pending' | 'failed';
-    paymentDate?: Date;
+  id:string,
+  month:string,
+  base_salary:number,
+  bonus: number,
+  deductions:number,
+  user_id:string,
+  created_at:string,
+  updated_at:string,
+  user?:{
+    id:string,
+    name:string,
+    email:string
+  }
 }
 
 @Injectable({
@@ -18,63 +25,37 @@ export interface Salary {
 })
 
 export class PayrollService {
-
-    salaryRecords: Salary[] = []
-    constructor(){
-      const storedSalaries = localStorage.getItem('salaryRecords')
-      if (storedSalaries) {
-        this.salaryRecords = JSON.parse(storedSalaries);
+  salaries: Salary[] = []
+  apiUrl:string = 'http://localhost:8000/api/salary'
+  constructor(private http:HttpClient){}
+  getAllSalaries(){
+    const start = performance.now()
+    return this.http.get<{message:string, salaries:Salary[]}>(`${this.apiUrl}/all`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}}).pipe(tap({
+      next: res=>{
+        this.salaries = res.salaries;
+        const loadTime = performance.now()-start;
+        LogRocket.track('Salaries Load Time', {page: "Payroll", loadTime:loadTime})
       }
-    }  
-
-    saveSalaryRecords() {
-      localStorage.setItem('salaryRecords', JSON.stringify(this.salaryRecords));
-    }         
-
-    addSalaryRecord(salary: Salary) {
-      this.salaryRecords.push(salary);
-      this.saveSalaryRecords();
-    }
-
-    getAllSalaries(): Salary[] {
-      return this.salaryRecords;
-    }
-
-    findSalaryById(employeeId: string): Salary | undefined {
-      return this.salaryRecords.find(s => s.employeeId === employeeId);
-    }
-
-    deleteSalaryRecord(employeeId: string) {
-      this.salaryRecords = this.salaryRecords.filter(s => s.employeeId !== employeeId);
-      this.saveSalaryRecords();
-    }
-
-    updateSalaryRecord(updatedSalary: Salary) {
-      const index = this.salaryRecords.findIndex(s => s.employeeId === updatedSalary.employeeId);   
-        if (index !== -1) {
-          this.salaryRecords[index] = updatedSalary;
-          this.saveSalaryRecords();
-        }
-    }
-
-    addBonus(employeeId: string, bonusAmount: number): boolean {
-      const salaryRecord = this.findSalaryById(employeeId);
-      if (salaryRecord) {
-        salaryRecord.bonus = (salaryRecord.bonus || 0) + bonusAmount;
-        this.updateSalaryRecord(salaryRecord);
-        return true;
+    }))
+  }
+  getUserSalaries(){
+    const start = performance.now()
+    return this.http.get<{message:string, salary:Salary[]}>(`${this.apiUrl}/`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}}).pipe(tap({
+      next: res=>{
+        this.salaries = res.salary
+        const loadTime = performance.now() - start;
+        LogRocket.track('Salaries Load Time (E)',{page: "Payroll", loadTime:loadTime})
       }
-      return false;
-    }
-
-    detuctAmount(employeeId: string, deductionAmount: number): boolean {
-      const salaryRecord = this.findSalaryById(employeeId);
-        if (salaryRecord) {
-            salaryRecord.deductions = (salaryRecord.deductions || 0) + deductionAmount;
-            this.updateSalaryRecord(salaryRecord);
-            return true;
-        }
-        return false;
-    }
-
+    }))
+  }
+  addSalaryForStaff(salary:{month:string,base_salary:number}){
+    return this.http.post<{message:string, staff:User[], salary:Salary}>(`${this.apiUrl}/to-all-staff`,salary,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}}).pipe(tap({
+      next: res=>{
+        this.salaries.push(res.salary)
+      }
+    }))
+  }
+  addBonusOrDeductions(id:string,payload:{bonus?:number, deductions?:number}){
+    return this.http.put<{message:string,salary:Salary }>(`${this.apiUrl}/bonus-or-deductions/${id}`,payload,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
+  }
 }
