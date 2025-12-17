@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs';
 import LogRocket from 'logrocket';
 import { User } from '../userService/userService';
+import { Observable } from 'rxjs';
 
 export interface Salary {
   id:string,
@@ -38,6 +39,14 @@ export class PayrollService {
       }
     }))
   }
+  addSalaryRecord(data: any): Observable<any> {
+    return this.http.post(this.apiUrl, data);
+  }
+
+  getSalaryRecords(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
   getUserSalaries(){
     const start = performance.now()
     return this.http.get<{message:string, salary:Salary[]}>(`${this.apiUrl}/`,{headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}}).pipe(tap({

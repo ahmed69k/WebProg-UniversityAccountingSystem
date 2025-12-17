@@ -1,19 +1,25 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { provideRouter } from '@angular/router';
-
 import { AuthGuard } from './auth-guard';
+import { UserService } from '../../shared/userService/userService';
 
 describe('AuthGuard', () => {
-
   let guard: AuthGuard;
-  let routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+  let userServiceSpy: jasmine.SpyObj<UserService>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(() => {
+    TestBed.resetTestingModule(); // FIX: Reset state
+
+    userServiceSpy = jasmine.createSpyObj('UserService', [], {
+      user: null
+    });
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
     TestBed.configureTestingModule({
       providers: [
         AuthGuard,
-        provideRouter([]),
+        { provide: UserService, useValue: userServiceSpy },
         { provide: Router, useValue: routerSpy }
       ]
     });
@@ -24,6 +30,4 @@ describe('AuthGuard', () => {
   it('should be created', () => {
     expect(guard).toBeTruthy();
   });
-
 });
-      providers: [provideRouter([])]
